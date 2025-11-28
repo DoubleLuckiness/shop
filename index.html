@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水果蔬菜零食烟酒饮料销售与库存管理系统</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modern-ui-enhancement.css"> <!-- 放在后面 -->
+    <link rel="stylesheet" href="css/member.css">
+    <link rel="stylesheet" href="css/discount.css">
+    <!-- <link rel="stylesheet" href="css/new.css"> -->
+    <link href="https://fonts.googleapis.com/css2?family=MiSans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 加在 body 最前面 -->
+  
+    <div class="container">
+        <header>
+            <h1 style="background: linear-gradient(90deg, #fff, #a0e7ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">水果蔬菜零食烟酒饮料销售系统</h1>
+            <p class="description">选择商品，输入重量/数量，自动计算价格和更新库存</p>
+        </header>
+        <div class="tabs">
+            <div class="tab active" data-tab="sales">
+                <i>💰</i>
+                <span>销售区</span>
+            </div>
+            <div class="tab" data-tab="inventory">
+                <i>📦</i>
+                <span>库存区</span>
+            </div>
+            <div class="tab" data-tab="discount">
+                <i>🏷️</i>
+                <span>打折商品</span>
+            </div>
+            <div class="tab" data-tab="delivery">
+                <i>🚚</i>
+                <span>预约配送</span>
+            </div>
+            <!-- 在预约配送区后面添加会员模块 -->
+            <div class="tab" data-tab="member">
+                <i>👑</i>
+                <span>会员管理</span>
+            </div>
+            <div class="tab" data-tab="salesRecords">
+                <i>📊</i>
+                <span>销售记录</span>
+            </div>
+        </div>
+        <div class="content">
+            <!-- 销售区 -->
+            <div class="tab-content active" id="sales-tab">
+                <div class="sales-header">
+                    <div class="search-box">
+                        <span></span>
+                        <input type="text" id="salesSearch" placeholder="搜索商品名称..." style="width: 300px; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+
+                    <div class="category-filter">
+                        <div class="category-btn active" data-category="all">
+                            <i>🛒</i>
+                            <span>全部商品</span>
+                        </div>
+                        <!-- 添加打折专区 -->
+                        <div class="category-btn" data-category="discount">
+                            <i>🏷️</i>
+                            <span>打折专区</span>
+                        </div>
+                        <div class="category-btn" data-category="fruit">
+                            <i>🍎</i>
+                            <span>水果</span>
+                        </div>
+                        <div class="category-btn" data-category="vegetable">
+                            <i>🥦</i>
+                            <span>蔬菜</span>
+                        </div>
+                        <div class="category-btn" data-category="snack">
+                            <i>🍪</i>
+                            <span>零食</span>
+                        </div>
+                        <div class="category-btn" data-category="cigarette">
+                            <i>🚬</i>
+                            <span>烟</span>
+                        </div>
+                        <div class="category-btn" data-category="liquor">
+                            <i>🍷</i>
+                            <span>酒</span>
+                        </div>
+                        <div class="category-btn" data-category="beverage">
+                            <i>🥤</i>
+                            <span>饮料</span>
+                        </div>
+                        <div class="category-btn" data-category="frozen">
+                            <i>❄️</i>
+                            <span>速冻</span>
+                        </div>
+                        <div class="category-btn" data-category="kitchen">
+                            <i>🍳</i>
+                            <span>厨房</span>
+                        </div>
+                        <div class="category-btn" data-category="living">
+                            <i>🧴</i>
+                            <span>生活</span>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="product-input-section">
+                    
+                    <div class="product-grid" id="products-grid"></div>
+                    
+                    <!-- 数量输入模态框 -->
+                    <div id="quantityModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+                        <div class="modal-content" style="background: white; padding: 20px; border-radius: 10px; width: 300px; max-width: 90%;">
+                            <h3 style="margin: 0 0 15px 0;">请输入数量</h3>
+                            <div id="modalProductInfo" style="margin-bottom: 15px; padding: 10px; background: #f5f5f5; border-radius: 5px; font-size: 14px;"></div>
+                            <input type="number" id="modalQuantity" placeholder="请输入重量/数量" min="0.1" step="0.1" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px;">
+                            <div class="modal-buttons" style="display: flex; gap: 10px;">
+                                <button id="cancelQuantityBtn" style="flex: 1; padding: 10px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 5px; cursor: pointer;">取消</button>
+                                <button id="confirmQuantityBtn" style="flex: 1; padding: 10px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">添加</button>
+                            </div>
+                        </div>
+                    </div>
+                                        
+                    <table id="productTable">
+                        <thead>
+                            <tr>
+                                <th>商品类型</th>
+                                <th>商品名称</th>
+                                <th>单价(元/单位)</th>
+                                <th>数量</th>
+                                <th>计价(元)</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productList"></tbody>
+                    </table>
+                    
+                    <div class="total" id="productTotal">总价: 0.00 元</div>
+                    <div style="margin-top:12px; text-align:right;">
+                        <button id="checkoutBtn" class="primary-btn">结算并清空</button>
+                        <button id="confirmDeliveryProductsBtn" class="primary-btn" style="display:none;">确认商品并返回预约</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 库存区 -->
+            <div class="tab-content" id="inventory-tab">
+
+                <div class="inventory-tabs">
+
+                    <!-- 添加全部商品选项卡 -->
+                    <div class="inventory-tab active" data-inventory-tab="all">
+                        <i>📊</i>
+                        <span>全部商品</span>
+                    </div>
+
+                    <div class="inventory-tab" data-inventory-tab="fruits">
+                        <i>🍎</i>
+                        <span>水果库存</span>
+                    </div>
+                    <div class="inventory-tab" data-inventory-tab="vegetables">
+                        <i>🥦</i>
+                        <span>蔬菜库存</span>
+                    </div>
+                    <div class="inventory-tab" data-inventory-tab="snacks">
+                        <i>🍪</i>
+                        <span>零食库存</span>
+                    </div>
+                    <div class="inventory-tab" data-inventory-tab="cigarettes">
+                        <i>🚬</i>
+                        <span>烟库存</span>
+                    </div>
+                    <div class="inventory-tab" data-inventory-tab="liquor">
+                        <i>🍷</i>
+                        <span>酒库存</span>
+                    </div>
+                    <div class="inventory-tab" data-inventory-tab="beverages">
+                        <i>🥤</i>
+                        <span>饮料库存</span>
+                    </div>
+                    <div class="inventory-tab" data-inventory-tab="frozens">
+                        <i>❄️</i>
+                        <span>速冻库存</span>
+                    </div>
+                    <div class="inventory-tab" data-inventory-tab="kitchens">
+                        <i>🍳</i>
+                        <span>厨房库存</span>
+                    </div>
+                    <div class="inventory-tab" data-inventory-tab="livings">
+                        <i>🧴</i>
+                        <span>生活库存</span>
+                    </div>
+                    <div class="inventory-tab" data-inventory-tab="management">
+                        <i>⚙️</i>
+                        <span>商品管理</span>
+                    </div>
+     
+                </div>
+
+                <div class="inventory-controls" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div class="search-box" style="margin-right: 20px;">
+                        <input type="text" id="inventorySearch" placeholder="搜索商品名称..." style="width: 250px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px;">
+                    </div>
+                    <!-- 损耗量管理按钮 -->
+                    <button id="manageLossBtn" style="background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                        📝 管理损耗量
+                    </button>
+                </div>
+
+                <!-- 在 inventory-batch-actions 部分修改排序相关代码 -->
+                <div class="inventory-batch-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="selectAllInventory" class="select-all-checkbox" style="transform: scale(1.2);">
+                            <span style="font-weight: bold;">全选本页</span>
+                        </label>
+                        <span id="selectedInventoryCount" style="color: #666;">已选择 0 个商品</span>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <!-- 排序功能 -->
+                        <div style="display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 6px; border: 1px solid #ddd;">
+                            <span style="font-weight: bold; color: #333;">排序:</span>
+                            <select id="inventorySort" style="border: none; padding: 4px 8px; background: transparent; outline: none;">
+                                <option value="name">按名称</option>
+                                <option value="price">按单价</option>
+                                <option value="initialStock">按原始库存</option>
+                                <option value="sold">按已销售</option>
+                                <option value="remaining">按剩余库存</option>
+                                <option value="loss">按损耗量</option>
+                                <option value="netStock">按净库存</option>
+                            </select>
+                            <span id="sortOrderIndicator" style="cursor: pointer; padding: 4px 8px; border-radius: 4px; background: #e3f2fd; color: #1976d2; font-weight: bold; min-width: 60px; text-align: center;">↑ 升序</span>
+                        </div>
+
+                        <button id="applySortBtn" style="background: #2196F3; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                            应用排序
+                        </button>
+
+                        <!-- 清除销售按钮 -->
+                        <button id="clearSalesBtn" style="background: #f44336; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; display: none; font-weight: bold;">
+                            🗑️ 清除选中销售 (<span id="clearSalesCount">0</span>)
+                        </button>
+                    </div>
+                </div>
+                <!-- 全部商品库存详情 -->
+                <div class="inventory-detail active" id="all-inventory-detail">
+                    <table class="inventory-table">
+                        <thead>
+                        <tr>
+                            <th>选择</th>
+                            <th>品类</th>
+                            <th>名称</th>
+                            <th>单价(元)</th>
+                            <th>原始库存</th>
+                            <th>已销售</th>
+                            <th>剩余库存</th>
+                            <th>损耗量</th>
+                            <th>净库存</th>
+                            <th>单位</th>
+                            <th>库存状态</th>
+                        </tr>
+                        </thead>
+                        <tbody id="all-inventory-body"></tbody>
+                    </table>
+                    <div class="stats-section">
+                        <div class="stat-card"><div class="stat-label">总种类</div><div class="stat-value" id="all-types">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="all-total-initial">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总销售量</div><div class="stat-value" id="all-total-sold">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总剩余库存</div><div class="stat-value" id="all-total-remaining">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总损耗量</div><div class="stat-value" id="all-total-loss">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总净库存</div><div class="stat-value" id="all-total-net">0</div></div>
+                    </div>
+                </div>
+
+                <!-- 水果库存详情 -->
+                <div class="inventory-detail" id="fruits-inventory-detail">
+                    <table class="inventory-table">
+                        <thead>
+
+                            <tr>
+                                <th>选择</th>
+                                <th>名称</th>
+                                <th>单价(元)</th>
+                                <th>原始库存</th>
+                                <th>已销售</th>
+                                <th>剩余库存</th>
+                                <th>损耗量</th>
+                                <th>净库存</th>
+                                <th>单位</th>
+                                <th>库存状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fruits-inventory-body"></tbody>
+                    </table>
+                    <div class="stats-section">
+                        <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="fruit-types">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="fruit-total-initial">0 </div></div>
+                        <div class="stat-card"><div class="stat-label">总销售量</div><div class="stat-value" id="fruit-total-sold">0 </div></div>
+                        <div class="stat-card"><div class="stat-label">总剩余库存</div><div class="stat-value" id="fruit-total-remaining">0 </div></div>
+                    </div>
+                </div>
+
+                <!-- 蔬菜库存详情 -->
+                <div class="inventory-detail" id="vegetables-inventory-detail">
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th width="40">选择</th>
+                                <th>名称</th>
+                                <th>单价(元/)</th>
+                                <th>原始库存</th>
+                                <th>已销售</th>
+                                <th>剩余库存</th>
+                                <th>损耗量</th>
+                                <th>净库存</th>
+                                <th>单位</th>
+                                <th>库存状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vegetables-inventory-body"></tbody>
+                    </table>
+                    <div class="stats-section">
+                        <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="vegetable-types">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="vegetable-total-initial">0 </div></div>
+                        <div class="stat-card"><div class="stat-label">总销售量</div><div class="stat-value" id="vegetable-total-sold">0 </div></div>
+                        <div class="stat-card"><div class="stat-label">总剩余库存</div><div class="stat-value" id="vegetable-total-remaining">0 </div></div>
+                    </div>
+                </div>
+
+                <!-- 零食库存详情 -->
+                <div class="inventory-detail" id="snacks-inventory-detail">
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th width="40">选择</th>
+                                <th>名称</th>
+                                <th>单价(元)</th>
+                                <th>原始库存</th>
+                                <th>已销售</th>
+                                <th>剩余库存</th>
+                                <th>损耗量</th>
+                                <th>净库存</th>
+                                <th>单位</th>
+                                <th>库存状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="snacks-inventory-body"></tbody>
+                    </table>
+                    <div class="stats-section">
+                        <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="snack-types">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="snack-total-initial">0 个</div></div>
+                        <div class="stat-card"><div class="stat-label">总销售量</div><div class="stat-value" id="snack-total-sold">0 个</div></div>
+                        <div class="stat-card"><div class="stat-label">总剩余库存</div><div class="stat-value" id="snack-total-remaining">0 个</div></div>
+                    </div>
+                </div>
+
+                <!-- 烟库存详情 -->
+                <div class="inventory-detail" id="cigarettes-inventory-detail">
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th width="40">选择</th>
+                                <th>名称</th>
+                                <th>单价(元)</th>
+                                <th>原始库存</th>
+                                <th>已销售</th>
+                                <th>剩余库存</th>
+                                <th>损耗量</th>
+                                <th>净库存</th>
+                                <th>单位</th>
+                                <th>库存状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cigarettes-inventory-body"></tbody>
+                    </table>
+                    <div class="stats-section">
+                        <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="cigarette-types">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="cigarette-total-initial">0 包</div></div>
+                        <div class="stat-card"><div class="stat-label">总销售量</div><div class="stat-value" id="cigarette-total-sold">0 包</div></div>
+                        <div class="stat-card"><div class="stat-label">总剩余库存</div><div class="stat-value" id="cigarette-total-remaining">0 包</div></div>
+                    </div>
+                </div>
+
+                <!-- 酒库存详情 -->
+                <div class="inventory-detail" id="liquor-inventory-detail">
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th width="40">选择</th>
+                                <th>名称</th>
+                                <th>单价(元)</th>
+                                <th>原始库存</th>
+                                <th>已销售</th>
+                                <th>剩余库存</th>
+                                <th>损耗量</th>
+                                <th>净库存</th>
+                                <th>单位</th>
+                                <th>库存状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="liquor-inventory-body"></tbody>
+                    </table>
+                    <div class="stats-section">
+                        <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="liquor-types">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="liquor-total-initial">0 瓶</div></div>
+                        <div class="stat-card"><div class="stat-label">总销售量</div><div class="stat-value" id="liquor-total-sold">0 瓶</div></div>
+                        <div class="stat-card"><div class="stat-label">总剩余库存</div><div class="stat-value" id="liquor-total-remaining">0 瓶</div></div>
+                    </div>
+                </div>
+
+                <!-- 饮料库存详情 -->
+                <div class="inventory-detail" id="beverages-inventory-detail">
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th width="40">选择</th>
+                                <th>名称</th>
+                                <th>单价(元)</th>
+                                <th>原始库存</th>
+                                <th>已销售</th>
+                                <th>剩余库存</th>
+                                <th>损耗量</th>
+                                <th>净库存</th>
+                                <th>单位</th>
+                                <th>库存状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="beverages-inventory-body"></tbody>
+                    </table>
+                    <div class="stats-section">
+                        <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="beverage-types">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="beverage-total-initial">0 瓶</div></div>
+                        <div class="stat-card"><div class="stat-label">总销售量</div><div class="stat-value" id="beverage-total-sold">0 瓶</div></div>
+                        <div class="stat-card"><div class="stat-label">总剩余库存</div><div class="stat-value" id="beverage-total-remaining">0 瓶</div></div>
+                    </div>
+                </div>
+
+                <!-- 速冻库存详情 -->
+                <div class="inventory-detail" id="frozens-inventory-detail">
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th width="40">选择</th>
+                                <th>名称</th>
+                                <th>单价(元)</th>
+                                <th>原始库存</th>
+                                <th>已销售</th>
+                                <th>剩余库存</th>
+                                <th>损耗量</th>
+                                <th>净库存</th>
+                                <th>单位</th>
+                                <th>库存状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="frozens-inventory-body"></tbody>
+                    </table>
+                    <div class="stats-section">
+                        <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="frozen-types">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="frozen-total-initial">0 </div></div>
+                        <div class="stat-card"><div class="stat-label">总销售量</div><div class="stat-value" id="frozen-total-sold">0 </div></div>
+                        <div class="stat-card"><div class="stat-label">总剩余库存</div><div class="stat-value" id="frozen-total-remaining">0 </div></div>
+                    </div>
+                </div>
+
+                <!-- 厨房库存详情 -->
+                <div class="inventory-detail" id="kitchens-inventory-detail">
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th width="40">选择</th>
+                                <th>名称</th>
+                                <th>单价</th>
+                                <th>原始库存</th>
+                                <th>已销售</th>
+                                <th>剩余库存</th>
+                                <th>损耗量</th>
+                                <th>净库存</th>
+                                <th>单位</th>
+                                <th>库存状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kitchens-inventory-body"></tbody>
+                    </table>
+                    <div class="stats-section">
+                        <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="kitchen-types">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="kitchen-total-initial">0 </div></div>
+                        <div class="stat-card"><div class="stat-label">总销售量</div><div class="stat-value" id="kitchen-total-sold">0 </div></div>
+                        <div class="stat-card"><div class="stat-label">总剩余库存</div><div class="stat-value" id="kitchen-total-remaining">0 </div></div>
+                    </div>
+                </div>
+
+                <!-- 生活库存详情 -->
+                <div class="inventory-detail" id="livings-inventory-detail">
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th width="40">选择</th>
+                                <th>名称</th>
+                                <th>单价</th>
+                                <th>原始库存</th>
+                                <th>已销售</th>
+                                <th>剩余库存</th>
+                                <th>损耗量</th>
+                                <th>净库存</th>
+                                <th>单位</th>
+                                <th>库存状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="livings-inventory-body"></tbody>
+                    </table>
+                    <div class="stats-section">
+                        <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="living-types">0</div></div>
+                        <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="living-total-initial">0 </div></div>
+                        <div class="stat-card"><div class="stat-label">总销售量</div><div class="stat-value" id="living-total-sold">0 </div></div>
+                        <div class="stat-card"><div class="stat-label">总剩余库存</div><div class="stat-value" id="living-total-remaining">0 </div></div>
+                    </div>
+                </div>
+
+                <!-- 更新损耗量管理模态框 -->
+                <div id="lossManagementModal" style="display: none;">
+                    <div>
+                        <h3>📝 管理商品损耗量</h3>
+
+                        <div class="form-group">
+                            <label>选择品类</label>
+                            <select id="lossProductType">
+                                <option value="">选择品类</option>
+                                <option value="fruit">水果</option>
+                                <option value="vegetable">蔬菜</option>
+                                <option value="snack">零食</option>
+                                <option value="cigarette">烟</option>
+                                <option value="liquor">酒</option>
+                                <option value="beverage">饮料</option>
+                                <option value="frozen">速冻</option>
+                                <option value="kitchen">厨房</option>
+                                <option value="living">生活</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>选择商品</label>
+                            <select id="lossProductSelect">
+                                <option value="">选择商品</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>损耗量</label>
+                            <input type="number" id="lossAmount" placeholder="输入损耗数量" min="0" step="0.1">
+                        </div>
+
+                        <div class="modal-buttons">
+                            <button id="cancelLossBtn">取消</button>
+                            <button id="saveLossBtn">确认损耗</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 商品管理 -->
+                <div class="inventory-detail" id="management-inventory-detail">
+                    <div class="management-tabs">
+                        <div class="management-tab active" data-management-tab="fruit">水果管理</div>
+                        <div class="management-tab" data-management-tab="vegetable">蔬菜管理</div>
+                        <div class="management-tab" data-management-tab="snack">零食管理</div>
+                        <div class="management-tab" data-management-tab="cigarette">烟管理</div>
+                        <div class="management-tab" data-management-tab="liquor">酒管理</div>
+                        <div class="management-tab" data-management-tab="beverage">饮料管理</div>
+                        <div class="management-tab" data-management-tab="frozen">速冻管理</div>
+                        <div class="management-tab" data-management-tab="kitchen">厨房管理</div>
+                        <div class="management-tab" data-management-tab="living">生活管理</div>
+                    </div>
+
+                    <!-- 水果管理 -->
+                    <div class="management-content active" id="fruit-management-content">
+                        <div class="product-management-section">
+                            <h3 class="section-title">添加新水果</h3>
+                            
+                            <div class="product-management-form">
+                                <div><label>名称</label><input type="text" id="newFruitName" placeholder="输入名称"></div>
+                                <div><label>单价(元)</label><input type="number" id="newFruitPrice" placeholder="0.00" min="0" step="0.1"></div>
+                                <div><label>初始库存</label><input type="number" id="newFruitStock" placeholder="0" min="0" step="0.1"></div>
+                                <div><label>选择图标</label><input type="text" id="newFruitIcon" placeholder="点击选择图标" readonly></div>
+                            </div>
+                            <div class="icon-selector" id="fruit-icon-selector">
+                                <div class="icon-option" data-icon="🍎">🍎</div><div class="icon-option" data-icon="🍏">🍏</div>
+                                <div class="icon-option" data-icon="🍐">🍐</div><div class="icon-option" data-icon="🍌">🍌</div>
+                                <div class="icon-option" data-icon="🍇">🍇</div><div class="icon-option" data-icon="🍉">🍉</div>
+                                <div class="icon-option" data-icon="🍓">🍓</div><div class="icon-option" data-icon="🍑">🍑</div>
+                                <div class="icon-option" data-icon="🍒">🍒</div><div class="icon-option" data-icon="🍍">🍍</div>
+                                <div class="icon-option" data-icon="🥝">🥝</div><div class="icon-option" data-icon="🥭">🥭</div>
+                                <div class="icon-option" data-icon="🍋">🍋</div><div class="icon-option" data-icon="🍊">🍊</div>
+                                <div class="icon-option" data-icon="🍈">🍈</div><div class="icon-option" data-icon="🥥">🥥</div>
+                                <div class="icon-option" data-icon="🥑">🥑</div>
+                            </div>
+                            <button id="addNewFruitBtn">添加水果</button>
+                        </div>
+                        <div class="product-management-section">
+                            <h3 class="section-title">水果列表</h3>
+                            <!-- 标题下方的极简批量操作栏 -->
+                            <div class="simple-batch-bar" style="
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 16px 18px;
+                                background: white;
+                                border-bottom: 2px solid #f0f0f0;
+                                margin: 20px 0 0 0;
+                                position: relative;
+                                overflow: hidden;
+                            ">
+                                <label style="cursor: pointer; user-select: none; display: flex; align-items: center; font-weight: bold; color: #333; font-size: 15px;">
+                                    <input type="checkbox" class="select-all-checkbox" style="margin-right: 10px; transform: scale(1.4);">
+                                    全选
+                                </label>
+
+                                <!-- 一键删除按钮（默认隐藏，选中后滑出） -->
+                                <button class="delete-selected-btn" style="
+                                    background: #f44336;
+                                    color: white;
+                                    border: none;
+                                    padding: 11px 26px;
+                                    border-radius: 50px;
+                                    font-weight: bold;
+                                    font-size: 15px;
+                                    box-shadow: 0 4px 15px rgba(244,67,54,0.4);
+                                    transform: translateX(120%);
+                                    opacity: 0;
+                                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                                    white-space: nowrap;
+                                ">
+                                    一键删除选中商品 (<span class="selected-count">0</span>)
+                                </button>
+                            </div>
+                            <div class="product-list" id="fruit-management-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 蔬菜管理 -->
+                    <div class="management-content" id="vegetable-management-content">
+                        <div class="product-management-section">
+                            <h3 class="section-title">添加新蔬菜</h3>
+                            
+                            <div class="product-management-form">
+                                <div><label>名称</label><input type="text" id="newVegetableName" placeholder="输入名称"></div>
+                                <div><label>单价(元)</label><input type="number" id="newVegetablePrice" placeholder="0.00" min="0" step="0.1"></div>
+                                <div><label>初始库存</label><input type="number" id="newVegetableStock" placeholder="0" min="0" step="0.1"></div>
+                                <div><label>选择图标</label><input type="text" id="newVegetableIcon" placeholder="点击选择图标" readonly></div>
+                            </div>
+                            <div class="icon-selector" id="vegetable-icon-selector">
+                                <div class="icon-option" data-icon="🍅">🍅</div><div class="icon-option" data-icon="🥕">🥕</div>
+                                <div class="icon-option" data-icon="🍄">🍄</div><div class="icon-option" data-icon="🌶️">🌶️</div>
+                                <div class="icon-option" data-icon="🥒">🥒</div> <div class="icon-option" data-icon="🥦">🥦</div>
+                                <div class="icon-option" data-icon="🥬">🥬</div><div class="icon-option" data-icon="🌿">🌿</div>
+                                <div class="icon-option" data-icon="🍃">🍃</div>
+                                <div class="icon-option" data-icon="🥔">🥔</div><div class="icon-option" data-icon="🌽">🌽</div>
+                                <div class="icon-option" data-icon="🧅">🧅</div><div class="icon-option" data-icon="🍠">🍠</div>
+                                <div class="icon-option" data-icon="🧄">🧄</div><div class="icon-option" data-icon="🍆">🍆</div>
+                                <div class="icon-option" data-icon="🥗">🥗</div><div class="icon-option" data-icon="🌰">🌰</div>
+                                <div class="icon-option" data-icon="🥚">🥚</div><div class="icon-option" data-icon="🦃">🦃</div>
+                                <div class="icon-option" data-icon="🥩">🥩</div><div class="icon-option" data-icon="🍖">🍖</div>
+                                <div class="icon-option" data-icon="🥓">🥓</div><div class="icon-option" data-icon="🍗">🍗</div>
+                                <div class="icon-option" data-icon="🥩">🥩</div><div class="icon-option" data-icon="🍖">🍖</div>
+                                <div class="icon-option" data-icon="🐏 ">🐏 </div><div class="icon-option" data-icon="🐮">🐮</div>
+                                <div class="icon-option" data-icon="🥩">🥩</div><div class="icon-option" data-icon="🍖">🍖</div>
+                                <div class="icon-option" data-icon="🐟 ">🐟 </div><div class="icon-option" data-icon="🦐">🦐</div>
+                                <div class="icon-option" data-icon="🦀 ">🦀 </div><div class="icon-option" data-icon="🦞 ">🦞 </div>
+                                <div class="icon-option" data-icon="🦑">🦑 </div><div class="icon-option" data-icon="🐙">🐙</div>
+                                <div class="icon-option" data-icon="🦪">🦪 </div><div class="icon-option" data-icon="🐚">🐚</div>
+                                <div class="icon-option" data-icon="🍛">🍛</div><div class="icon-option" data-icon="🍚">🍚</div>
+                                <div class="icon-option" data-icon="🍜">🍜</div><div class="icon-option" data-icon="🍝">🍝</div>
+                                <div class="icon-option" data-icon="🍲">🍲</div><div class="icon-option" data-icon="🍡">🍡</div>
+
+                            </div>
+                            <button id="addNewVegetableBtn">添加蔬菜</button>
+                        </div>
+                        <div class="product-management-section">
+                            <h3 class="section-title">蔬菜列表</h3>
+                            <!-- 标题下方的极简批量操作栏 -->
+                            <div class="simple-batch-bar" style="
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 16px 18px;
+                                background: white;
+                                border-bottom: 2px solid #f0f0f0;
+                                margin: 20px 0 0 0;
+                                position: relative;
+                                overflow: hidden;
+                            ">
+                                <label style="cursor: pointer; user-select: none; display: flex; align-items: center; font-weight: bold; color: #333; font-size: 15px;">
+                                    <input type="checkbox" class="select-all-checkbox" style="margin-right: 10px; transform: scale(1.4);">
+                                    全选本页商品
+                                </label>
+
+                                <!-- 一键删除按钮（默认隐藏，选中后滑出） -->
+                                <button class="delete-selected-btn" style="
+                                    background: #f44336;
+                                    color: white;
+                                    border: none;
+                                    padding: 11px 26px;
+                                    border-radius: 50px;
+                                    font-weight: bold;
+                                    font-size: 15px;
+                                    box-shadow: 0 4px 15px rgba(244,67,54,0.4);
+                                    transform: translateX(120%);
+                                    opacity: 0;
+                                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                                    white-space: nowrap;
+                                ">
+                                    一键删除选中商品 (<span class="selected-count">0</span>)
+                                </button>
+                            </div>
+                            <div class="product-list" id="vegetable-management-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 零食管理 -->
+                    <div class="management-content" id="snack-management-content">
+                        <div class="product-management-section">
+                            <h3 class="section-title">添加新零食</h3>
+                            <div class="product-management-form">
+                                <div><label>名称</label><input type="text" id="newSnackName" placeholder="输入名称"></div>
+                                <div><label>单价(元)</label><input type="number" id="newSnackPrice" placeholder="0.00" min="0" step="0.1"></div>
+                                <div><label>初始库存</label><input type="number" id="newSnackStock" placeholder="0" min="0" step="0.1"></div>
+                                <div><label>选择图标</label><input type="text" id="newSnackIcon" placeholder="点击选择图标" readonly></div>
+                            </div>
+                            <div class="icon-selector" id="snack-icon-selector">
+                                <div class="icon-option" data-icon="🍪">🍪</div><div class="icon-option" data-icon="🍫">🍫</div>
+                                <div class="icon-option" data-icon="🍿">🍿</div><div class="icon-option" data-icon="🍬">🍬</div>
+                                <div class="icon-option" data-icon="🥜">🥜</div><div class="icon-option" data-icon="🍟">🍟</div>
+                                <div class="icon-option" data-icon="🥨">🥨</div><div class="icon-option" data-icon="🥠">🥠</div>
+                                <div class="icon-option" data-icon="🥮">🥮</div><div class="icon-option" data-icon="🍭">🍭</div>
+                                <div class="icon-option" data-icon="🍯">🍯</div><div class="icon-option" data-icon="🍦">🍦</div>
+                                <div class="icon-option" data-icon="🥤">🥤</div><div class="icon-option" data-icon="🌰">🌰</div>
+                                <div class="icon-option" data-icon="🥣">🥣</div><div class="icon-option" data-icon="🌮">🌮</div>
+                                <div class="icon-option" data-icon="🥪">🥪</div><div class="icon-option" data-icon="🥫">🥫</div>
+                                <div class="icon-option" data-icon="🧴">🧴</div><div class="icon-option" data-icon="🥡">🥡</div>
+                                <div class="icon-option" data-icon="🍱">🍱</div><div class="icon-option" data-icon="🍘">🍘</div>
+                                <div class="icon-option" data-icon="🧴">🧴</div><div class="icon-option" data-icon="🥡">🥡</div>
+                                <div class="icon-option" data-icon="🍛">🍛</div><div class="icon-option" data-icon="🍚">🍚</div>
+                                <div class="icon-option" data-icon="🍜">🍜</div><div class="icon-option" data-icon="🍝">🍝</div>
+                                <div class="icon-option" data-icon="🍲">🍲</div><div class="icon-option" data-icon="🍡">🍡</div>
+                                <div class="icon-option" data-icon="🌭 ">🌭 </div><div class="icon-option" data-icon="🪀">🪀</div>
+                                <div class="icon-option" data-icon="🧸">🧸</div><div class="icon-option" data-icon="🌶️">🌶️</div>
+                                <div class="icon-option" data-icon="🎲">🎲</div><div class="icon-option" data-icon="🧩">🧩</div>
+                                <div class="icon-option" data-icon="🪁">🪁</div>
+                            </div>
+                            <button id="addNewSnackBtn">添加零食</button>
+                        </div>
+                        <div class="product-management-section">
+                            <h3 class="section-title">零食列表</h3>
+                            <div class="product-list" id="snack-management-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 烟管理 -->
+                    <div class="management-content" id="cigarette-management-content">
+                        <div class="product-management-section">
+                            <h3 class="section-title">添加新烟</h3>
+                            <div class="product-management-form">
+                                <div><label>名称</label><input type="text" id="newCigaretteName" placeholder="输入名称"></div>
+                                <div><label>单价(元)</label><input type="number" id="newCigarettePrice" placeholder="0.00" min="0" step="0.1"></div>
+                                <div><label>初始库存</label><input type="number" id="newCigaretteStock" placeholder="0" min="0" step="0.1"></div>
+                                <div><label>选择图标</label><input type="text" id="newCigaretteIcon" placeholder="点击选择图标" readonly></div>
+                            </div>
+                            <div class="icon-selector" id="cigarette-icon-selector">
+                                <div class="icon-option" data-icon="🚬">🚬</div>
+                            </div>
+                            <button id="addNewCigaretteBtn">添加烟</button>
+                        </div>
+                        <div class="product-management-section">
+                            <h3 class="section-title">烟列表</h3>
+                            <!-- 标题下方的极简批量操作栏 -->
+                            <div class="simple-batch-bar" style="
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 16px 18px;
+                                background: white;
+                                border-bottom: 2px solid #f0f0f0;
+                                margin: 20px 0 0 0;
+                                position: relative;
+                                overflow: hidden;
+                            ">
+                                <label style="cursor: pointer; user-select: none; display: flex; align-items: center; font-weight: bold; color: #333; font-size: 15px;">
+                                    <input type="checkbox" class="select-all-checkbox" style="margin-right: 10px; transform: scale(1.4);">
+                                    全选本页商品
+                                </label>
+
+                                <!-- 一键删除按钮（默认隐藏，选中后滑出） -->
+                                <button class="delete-selected-btn" style="
+                                    background: #f44336;
+                                    color: white;
+                                    border: none;
+                                    padding: 11px 26px;
+                                    border-radius: 50px;
+                                    font-weight: bold;
+                                    font-size: 15px;
+                                    box-shadow: 0 4px 15px rgba(244,67,54,0.4);
+                                    transform: translateX(120%);
+                                    opacity: 0;
+                                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                                    white-space: nowrap;
+                                ">
+                                    一键删除选中商品 (<span class="selected-count">0</span>)
+                                </button>
+                            </div>
+
+                            <div class="product-list" id="cigarette-management-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 酒管理 -->
+                    <div class="management-content" id="liquor-management-content">
+                        <div class="product-management-section">
+                            <h3 class="section-title">添加新酒</h3>
+                            <div class="product-management-form">
+                                <div><label>名称</label><input type="text" id="newLiquorName" placeholder="输入名称"></div>
+                                <div><label>单价(元)</label><input type="number" id="newLiquorPrice" placeholder="0.00" min="0" step="0.1"></div>
+                                <div><label>初始库存</label><input type="number" id="newLiquorStock" placeholder="0" min="0" step="0.1"></div>
+                                <div><label>选择图标</label><input type="text" id="newLiquorIcon" placeholder="点击选择图标" readonly></div>
+                            </div>
+                            <div class="icon-selector" id="liquor-icon-selector">
+                                <div class="icon-option" data-icon="🍷">🍷</div><div class="icon-option" data-icon="🍸">🍸</div>
+                                <div class="icon-option" data-icon="🍺">🍺</div><div class="icon-option" data-icon="🥃">🥃</div>
+                                <div class="icon-option" data-icon="🍹">🍹</div><div class="icon-option" data-icon="🍾">🍾</div>
+                                <div class="icon-option" data-icon="🏺">🏺</div><div class="icon-option" data-icon="🧉">🧉</div>
+                                <div class="icon-option" data-icon="🥣">🥣</div><div class="icon-option" data-icon="🍚">🍚</div>
+                                <div class="icon-option" data-icon="🥂">🥂</div><div class="icon-option" data-icon="🧴">🧴</div>
+                            </div>
+                            <button id="addNewLiquorBtn">添加酒</button>
+                        </div>
+                        <div class="product-management-section">
+                            <h3 class="section-title">酒列表</h3>
+                            <!-- 标题下方的极简批量操作栏 -->
+                            <div class="simple-batch-bar" style="
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 16px 18px;
+                                background: white;
+                                border-bottom: 2px solid #f0f0f0;
+                                margin: 20px 0 0 0;
+                                position: relative;
+                                overflow: hidden;
+                            ">
+                                <label style="cursor: pointer; user-select: none; display: flex; align-items: center; font-weight: bold; color: #333; font-size: 15px;">
+                                    <input type="checkbox" class="select-all-checkbox" style="margin-right: 10px; transform: scale(1.4);">
+                                    全选本页商品
+                                </label>
+
+                                <!-- 一键删除按钮（默认隐藏，选中后滑出） -->
+                                <button class="delete-selected-btn" style="
+                                    background: #f44336;
+                                    color: white;
+                                    border: none;
+                                    padding: 11px 26px;
+                                    border-radius: 50px;
+                                    font-weight: bold;
+                                    font-size: 15px;
+                                    box-shadow: 0 4px 15px rgba(244,67,54,0.4);
+                                    transform: translateX(120%);
+                                    opacity: 0;
+                                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                                    white-space: nowrap;
+                                ">
+                                    一键删除选中商品 (<span class="selected-count">0</span>)
+                                </button>
+                            </div>
+                            <div class="product-list" id="liquor-management-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 饮料管理 -->
+                    <div class="management-content" id="beverage-management-content">
+                        <div class="product-management-section">
+                            <h3 class="section-title">添加新饮料</h3>
+                            
+                            <div class="product-management-form">
+                                <div><label>名称</label><input type="text" id="newBeverageName" placeholder="输入名称"></div>
+                                <div><label>单价(元)</label><input type="number" id="newBeveragePrice" placeholder="0.00" min="0" step="0.1"></div>
+                                <div><label>初始库存</label><input type="number" id="newBeverageStock" placeholder="0" min="0" step="0.1"></div>
+                                <div><label>选择图标</label><input type="text" id="newBeverageIcon" placeholder="点击选择图标" readonly></div>
+                            </div>
+                            <div class="icon-selector" id="beverage-icon-selector">
+                                <div class="icon-option" data-icon="🧃">🧃</div><div class="icon-option" data-icon="🥤">🥤</div>
+                                <div class="icon-option" data-icon="☕">☕</div><div class="icon-option" data-icon="🥛">🥛</div>
+                                <div class="icon-option" data-icon="🧉">🧉</div><div class="icon-option" data-icon="🍵">🍵</div>
+                                <div class="icon-option" data-icon="🍶">🍶</div><div class="icon-option" data-icon="🍾">🍾</div>
+                                <div class="icon-option" data-icon="☕">☕</div><div class="icon-option" data-icon="💧">💧</div>
+                                <div class="icon-option" data-icon="🚰 ">🚰 </div><div class="icon-option" data-icon="🧊">🧊</div>
+                                <div class="icon-option" data-icon="🍼 ">🍼 </div><div class="icon-option" data-icon="💪">💪</div>
+                                <div class="icon-option" data-icon="🧠">🧠</div>
+                            </div>
+                            <button id="addNewBeverageBtn">添加饮料</button>
+                        </div>
+                        <div class="product-management-section">
+                            <h3 class="section-title">饮料列表</h3>
+                            <!-- 标题下方的极简批量操作栏 -->
+                            <div class="simple-batch-bar" style="
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 16px 18px;
+                                background: white;
+                                border-bottom: 2px solid #f0f0f0;
+                                margin: 20px 0 0 0;
+                                position: relative;
+                                overflow: hidden;
+                            ">
+                                <label style="cursor: pointer; user-select: none; display: flex; align-items: center; font-weight: bold; color: #333; font-size: 15px;">
+                                    <input type="checkbox" class="select-all-checkbox" style="margin-right: 10px; transform: scale(1.4);">
+                                    全选本页商品
+                                </label>
+
+                                <!-- 一键删除按钮（默认隐藏，选中后滑出） -->
+                                <button class="delete-selected-btn" style="
+                                    background: #f44336;
+                                    color: white;
+                                    border: none;
+                                    padding: 11px 26px;
+                                    border-radius: 50px;
+                                    font-weight: bold;
+                                    font-size: 15px;
+                                    box-shadow: 0 4px 15px rgba(244,67,54,0.4);
+                                    transform: translateX(120%);
+                                    opacity: 0;
+                                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                                    white-space: nowrap;
+                                ">
+                                    一键删除选中商品 (<span class="selected-count">0</span>)
+                                </button>
+                            </div>
+                            <div class="product-list" id="beverage-management-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 速冻管理 -->
+                    <div class="management-content" id="frozen-management-content">
+                        <div class="product-management-section">
+                            <h3 class="section-title">添加新速冻</h3>
+                            <div class="product-management-form">
+                                <div><label>名称</label><input type="text" id="newFrozenName" placeholder="输入名称"></div>
+                                <div><label>单价(元)</label><input type="number" id="newFrozenPrice" placeholder="0.00" min="0" step="0.1"></div>
+                                <div><label>初始库存</label><input type="number" id="newFrozenStock" placeholder="0" min="0" step="0.1"></div>
+                                <div><label>选择图标</label><input type="text" id="newFrozenIcon" placeholder="点击选择图标" readonly></div>
+                            </div>
+                            <div class="icon-selector" id="frozen-icon-selector">
+                                <div class="icon-option" data-icon="🍦">🍦</div><div class="icon-option" data-icon="🍨">🍨</div>
+                                <div class="icon-option" data-icon="🍧">🍧</div><div class="icon-option" data-icon="🧁">🧁</div>
+                                <div class="icon-option" data-icon="🍰">🍰</div><div class="icon-option" data-icon="🥡">🥡 </div>
+                                <div class="icon-option" data-icon="🍱">🍱</div><div class="icon-option" data-icon="🍝">🍝</div>
+                                <div class="icon-option" data-icon="❄️">❄️</div><div class="icon-option" data-icon="🥟">🥟</div>
+                                <div class="icon-option" data-icon="🍤">🍤</div><div class="icon-option" data-icon="🍦">🍦</div>
+                                <div class="icon-option" data-icon="🍗">🍗️</div><div class="icon-option" data-icon="🥩">🥩</div>
+                                <div class="icon-option" data-icon="🥓">🥓</div><div class="icon-option" data-icon="🌭 ">🌭 </div>
+                                <div class="icon-option" data-icon="🍗">🍗️</div><div class="icon-option" data-icon="🥩">🥩</div>
+                                <div class="icon-option" data-icon="🐟">🐟</div><div class="icon-option" data-icon="🦀 ">🦀 </div>
+                                <div class="icon-option" data-icon="🐙">🐙</div><div class="icon-option" data-icon="🦪 ">🦪 </div>
+
+                            </div>
+                            <button id="addNewFrozenBtn">添加速冻</button>
+                        </div>
+                        <div class="product-management-section">
+                            <h3 class="section-title">速冻列表</h3>
+                            <!-- 标题下方的极简批量操作栏 -->
+                            <div class="simple-batch-bar" style="
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 16px 18px;
+                                background: white;
+                                border-bottom: 2px solid #f0f0f0;
+                                margin: 20px 0 0 0;
+                                position: relative;
+                                overflow: hidden;
+                            ">
+                                <label style="cursor: pointer; user-select: none; display: flex; align-items: center; font-weight: bold; color: #333; font-size: 15px;">
+                                    <input type="checkbox" class="select-all-checkbox" style="margin-right: 10px; transform: scale(1.4);">
+                                    全选本页商品
+                                </label>
+
+                                <!-- 一键删除按钮（默认隐藏，选中后滑出） -->
+                                <button class="delete-selected-btn" style="
+                                    background: #f44336;
+                                    color: white;
+                                    border: none;
+                                    padding: 11px 26px;
+                                    border-radius: 50px;
+                                    font-weight: bold;
+                                    font-size: 15px;
+                                    box-shadow: 0 4px 15px rgba(244,67,54,0.4);
+                                    transform: translateX(120%);
+                                    opacity: 0;
+                                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                                    white-space: nowrap;
+                                ">
+                                    一键删除选中商品 (<span class="selected-count">0</span>)
+                                </button>
+                            </div>
+                            <div class="product-list" id="frozen-management-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 厨房管理 -->
+                    <div class="management-content" id="kitchen-management-content">
+                        <div class="product-management-section">
+                            <h3 class="section-title">添加新厨房用品</h3>
+                            <div class="product-management-form">
+                                <div><label>名称</label><input type="text" id="newKitchenName" placeholder="输入名称"></div>
+                                <div><label>单价(元)</label><input type="number" id="newKitchenPrice" placeholder="0.00" min="0" step="0.1"></div>
+                                <div><label>初始库存</label><input type="number" id="newKitchenStock" placeholder="0" min="0" step="0.1"></div>
+                                <div><label>选择图标</label><input type="text" id="newKitchenIcon" placeholder="点击选择图标" readonly></div>
+                            </div>
+                            <div class="icon-selector" id="kitchen-icon-selector">
+                                <div class="icon-option" data-icon="🧂">🧂</div><div class="icon-option" data-icon="🧴">🧴</div>
+                                <div class="icon-option" data-icon="🌶️">🌶️</div><div class="icon-option" data-icon="🌿">🌿</div>
+                                <div class="icon-option" data-icon="🍶">🍶️</div><div class="icon-option" data-icon="🍃">🍃</div>
+                                <div class="icon-option" data-icon="🍴">🍴</div><div class="icon-option" data-icon="🥄">🥄</div>
+                                <div class="icon-option" data-icon="📦 ">📦 </div><div class="icon-option" data-icon="🥘">🥘</div>
+                                <div class="icon-option" data-icon="🔪">🔪</div><div class="icon-option" data-icon="🍳">🍳</div>
+                                <div class="icon-option" data-icon="🥚">🥚</div><div class="icon-option" data-icon="🍛">🍛</div>
+                                <div class="icon-option" data-icon="🍚">🍚</div><div class="icon-option" data-icon="🍜">🍜</div>
+                                <div class="icon-option" data-icon="🍝">🍝</div><div class="icon-option" data-icon="🍲">🍲</div>
+                            </div>
+                            <button id="addNewKitchenBtn">添加厨房用品</button>
+                        </div>
+                        <div class="product-management-section">
+                            <h3 class="section-title">厨房列表</h3>
+                            <!-- 标题下方的极简批量操作栏 -->
+                            <div class="simple-batch-bar" style="
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 16px 18px;
+                                background: white;
+                                border-bottom: 2px solid #f0f0f0;
+                                margin: 20px 0 0 0;
+                                position: relative;
+                                overflow: hidden;">
+                            
+                                <label style="cursor: pointer; user-select: none; display: flex; align-items: center; font-weight: bold; color: #333; font-size: 15px;">
+                                    <input type="checkbox" class="select-all-checkbox" style="margin-right: 10px; transform: scale(1.4);">
+                                    全选本页商品
+                                </label>
+
+                                <!-- 一键删除按钮（默认隐藏，选中后滑出） -->
+                                <button class="delete-selected-btn" style="
+                                    background: #f44336;
+                                    color: white;
+                                    border: none;
+                                    padding: 11px 26px;
+                                    border-radius: 50px;
+                                    font-weight: bold;
+                                    font-size: 15px;
+                                    box-shadow: 0 4px 15px rgba(244,67,54,0.4);
+                                    transform: translateX(120%);
+                                    opacity: 0;
+                                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                                    white-space: nowrap;
+                                ">
+                                    一键删除选中商品 (<span class="selected-count">0</span>)
+                                </button>
+                            </div>
+                            <div class="product-list" id="kitchen-management-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 生活管理 -->
+                    <div class="management-content" id="living-management-content">
+                        <div class="product-management-section">
+                            <h3 class="section-title">添加新生活用品</h3>
+
+                            <div class="product-management-form">
+                                <div><label>名称</label><input type="text" id="newLivingName" placeholder="输入名称"></div>
+                                <div><label>单价(元)</label><input type="number" id="newLivingPrice" placeholder="0.00" min="0" step="0.1"></div>
+                                <div><label>初始库存</label><input type="number" id="newLivingStock" placeholder="0" min="0" step="0.1"></div>
+                                <div><label>选择图标</label><input type="text" id="newLivingIcon" placeholder="点击选择图标" readonly></div>
+                            </div>
+                            <div class="icon-selector" id="living-icon-selector">
+                                <div class="icon-option" data-icon="🧴">🧴</div><div class="icon-option" data-icon="🧻">🧻</div>
+                                <div class="icon-option" data-icon="🧼">🧼</div><div class="icon-option" data-icon="🛁">🛁</div>
+                                <div class="icon-option" data-icon="📰">📰</div><div class="icon-option" data-icon="📄">📄</div>
+                                <div class="icon-option" data-icon="🎁">🎁</div><div class="icon-option" data-icon="🧽">🧽</div>
+                                <div class="icon-option" data-icon="🧹">🧹</div><div class="icon-option" data-icon="🗑️">🗑️</div>
+                                <div class="icon-option" data-icon="🛏️">🛏️</div><div class="icon-option" data-icon="💡">💡</div>
+                                <div class="icon-option" data-icon="🪑">🪑</div><div class="icon-option" data-icon="🖼️">🖼️ ️</div>
+                                <div class="icon-option" data-icon="🧷">🧷</div><div class="icon-option" data-icon="📎">📎</div>
+                                <div class="icon-option" data-icon="✂️">✂️</div><div class="icon-option" data-icon="🔦">🔦</div>
+                                <div class="icon-option" data-icon="🕯️">🕯️</div><div class="icon-option" data-icon="🪒">🪒️ ️</div>
+                                <div class="icon-option" data-icon="🧺">🧺</div><div class="icon-option" data-icon="📦">📦</div>
+                                <div class="icon-option" data-icon="🗃️">🗃️</div><div class="icon-option" data-icon="🪒">🪒️ ️</div>
+                                <div class="icon-option" data-icon="🔌">🔌</div><div class="icon-option" data-icon="🔋 ">🔋 </div>
+                                <div class="icon-option" data-icon="📱">📱 </div><div class="icon-option" data-icon="🖥️">🖥️</div>
+                                <div class="icon-option" data-icon="🪀">🪀</div><div class="icon-option" data-icon="🧸">🧸 ️</div>
+                                <div class="icon-option" data-icon="🎲">🎲</div><div class="icon-option" data-icon="🧩">🧩</div>
+                                <div class="icon-option" data-icon="🪁">🪁</div><div class="icon-option" data-icon="🧯">🧯️ ️</div>
+                                <div class="icon-option" data-icon="🚪">🚪</div><div class="icon-option" data-icon="🔒">🔒️ ️</div>
+                            </div>
+                            <button id="addNewLivingBtn">添加生活用品</button>
+                        </div>
+                        <div class="product-management-section">
+                            <h3 class="section-title">生活列表</h3>
+                            <!-- 标题下方的极简批量操作栏 -->
+                            <div class="simple-batch-bar" style="
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 16px 18px;
+                                background: white;
+                                border-bottom: 2px solid #f0f0f0;
+                                margin: 20px 0 0 0;
+                                position: relative;
+                                overflow: hidden;
+                            ">
+                                <label style="cursor: pointer; user-select: none; display: flex; align-items: center; font-weight: bold; color: #333; font-size: 15px;">
+                                    <input type="checkbox" class="select-all-checkbox" style="margin-right: 10px; transform: scale(1.4);">
+                                    全选本页商品
+                                </label>
+
+                                <!-- 一键删除按钮（默认隐藏，选中后滑出） -->
+                                <button class="delete-selected-btn" style="
+                                    background: #f44336;
+                                    color: white;
+                                    border: none;
+                                    padding: 11px 26px;
+                                    border-radius: 50px;
+                                    font-weight: bold;
+                                    font-size: 15px;
+                                    box-shadow: 0 4px 15px rgba(244,67,54,0.4);
+                                    transform: translateX(120%);
+                                    opacity: 0;
+                                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                                    white-space: nowrap;
+                                ">
+                                    一键删除选中商品 (<span class="selected-count">0</span>)
+                                </button>
+                            </div>
+                            <div class="product-list" id="living-management-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 统一进货管理（仅保留在此） -->
+                <div class="add-stock-section" style="margin-top: 30px;">
+                    <h3 class="section-title">统一进货管理</h3>
+                    <div class="add-stock-form">
+                        <select id="stockType">
+                            <option value="fruit">水果</option>
+                            <option value="vegetable">蔬菜</option>
+                            <option value="snack">零食</option>
+                            <option value="cigarette">烟</option>
+                            <option value="liquor">酒</option>
+                            <option value="beverage">饮料</option>
+                            <option value="frozen">速冻</option>
+                            <option value="kitchen">厨房</option>
+                            <option value="living">生活</option>
+                        </select>
+                        <select id="stockProduct"><option value="">请选择商品</option></select>
+                        <input type="number" id="stockAmount" placeholder="进货数量" min="0.1" step="0.1">
+                        <button id="addStockBtn">添加进货</button>
+                    </div>
+                </div>
+
+                <!-- 新增：统一退货管理 -->
+                <div class="return-stock-section" style="margin-top: 30px;">
+                    <h3 class="section-title">统一退货管理</h3>
+                    <div class="return-stock-form">
+                        <select id="returnType">
+                            <option value="fruit">水果</option>
+                            <option value="vegetable">蔬菜</option>
+                            <option value="snack">零食</option>
+                            <option value="cigarette">烟</option>
+                            <option value="liquor">酒</option>
+                            <option value="beverage">饮料</option>
+                            <option value="frozen">速冻</option>
+                            <option value="kitchen">厨房</option>
+                            <option value="living">生活</option>
+                        </select>
+                        <select id="returnProduct"><option value="">请选择商品</option></select>
+                        <input type="number" id="returnAmount" placeholder="退货数量" min="0.1" step="0.1">
+                        <button id="addReturnBtn">确认退货</button>
+                    </div>
+                    
+                   <!--  <p style="color:#e91e63; font-size:14px; margin-top:8px;">
+                        退货将减少原始库存（initialStock），适用于进货错误、损坏等情况
+                    </p> -->
+                </div>
+            </div>
+
+            <!-- 商品打折 -->
+            <div class="tab-content" id="discount-tab">
+                <div class="discount-section">
+                    <div class="discount-tabs">
+                        <div class="discount-tab active" data-discount-tab="management">
+                            <i>📦</i>
+                            <span>打折商品管理</span>
+                        </div>
+                        <div class="discount-tab" data-discount-tab="list">
+                            <i>📋</i>
+                            <span>打折商品列表</span>
+                        </div>
+                    </div>
+
+                    <!-- 打折商品管理 -->
+                    <div class="discount-content active" id="management-discount-content">
+                        <div class="discount-management-section">
+                            <h2 class="section-title">添加打折商品</h2>
+                            <!-- ========= 打折商品添加表单 - 终极防堆叠版（一个元素都没动） ========= -->
+                            <div class="discount-product-form-wrapper">
+                                <div class="discount-product-form-grid">
+
+                                    <select id="discountProductType">
+                                        <option value="">选择品类</option>
+                                        <option value="fruit">水果</option>
+                                        <option value="vegetable">蔬菜</option>
+                                        <option value="snack">零食</option>
+                                        <option value="cigarette">烟</option>
+                                        <option value="liquor">酒</option>
+                                        <option value="beverage">饮料</option>
+                                        <option value="frozen">速冻</option>
+                                        <option value="kitchen">厨房</option>
+                                        <option value="living">生活</option>
+                                    </select>
+
+                                    <select id="newDiscountProductSelect">
+                                        <option value="">选择商品</option>
+                                    </select>
+                                    <!-- 单位选择 -->
+                                    <select id="discountProductUnit">
+                                        <option value="">选择单位</option>
+                                        <option value="公斤">公斤</option>
+                                        <option value="斤">斤</option>
+                                        <option value="个">个</option>
+                                        <option value="袋">袋</option>
+                                        <option value="包">包</option>
+                                        <option value="瓶">瓶</option>
+                                        <option value="盒">盒</option>
+                                        <option value="件">件</option>
+                                        <option value="custom">自定义...</option>
+                                    </select>
+                                    <div id="discountProductCustomUnit" class="custom-unit-input hidden">
+                                        <input type="text" placeholder="输入自定义单位">
+                                    </div>
+
+
+                                    <!-- 定价方式选择器 -->
+                                    <div class="pricing-method-group">
+                                        <select id="discountPricingMethod">
+                                            <option value="discount">折扣率定价</option>
+                                            <option value="fixed">固定价格定价</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- 折扣率输入 -->
+                                    <div id="discountRateGroup" class="pricing-input-group">
+                                        <input type="number" id="newDiscountProductDiscount" placeholder="折扣率(0.01-1.0)"
+                                               min="0.01" max="1.0" step="0.01" value="0.8">
+
+                                    </div>
+
+                                    <!-- 固定价格输入 -->
+                                    <div id="fixedPriceGroup" class="pricing-input-group hidden">
+                                        <input type="number" id="newDiscountProductFixedPrice" placeholder="固定价格"
+                                               min="0.01" step="0.01">
+                                    </div>
+
+                                    <input type="number" id="newDiscountProductStock" placeholder="打折商品库存" min="0.1" step="0.1">
+
+                                    <input type="text" id="newDiscountProductReason" placeholder="打折原因" value="临期处理">
+
+                                    <button type="button" id="addDiscountProductBtn">添加打折商品</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 打折商品列表 -->
+                    <div class="discount-content" id="list-discount-content">
+                        <div class="discount-management-section">
+                            <h3 class="section-title">打折商品列表</h3>
+                            <div class="search-box" style="margin-bottom: 15px;">
+                                <input type="text" id="discountProductSearch" placeholder="搜索打折商品..." style="width: 300px;">
+                            </div>
+                            <button id="deleteSelectedDiscountBtn" style="background: #f44336; color: white; border: none; padding: 11px 26px;border-radius: 50px; font-weight: bold; font-size: 15px; box-shadow: 0 4px 15px rgba(244,67,54,0.4);transform: translateX(120%); opacity: 0; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);white-space: nowrap; display: none; margin: 15px 0;">
+                               <span> 删除选中打折商品 (<span id="selectedDiscountCount">0</span>)
+                            </button>
+                            <table class="discount-products-table">
+                                <thead>
+                                <tr>
+                                    <th width="40">
+                                        <input type="checkbox" id="selectAllDiscountHeader" class="select-all-checkbox">
+                                    </th>
+                                    <th>商品名称</th>
+                                    <th>原价</th>
+                                    <th>打折价</th>
+                                    <th>折扣率</th>
+                                    <th>库存</th>
+                                    <th>单位</th>
+                                    <th>原因</th>
+                                    <th>创建时间</th>
+                                </tr>
+                                </thead>
+                                <tbody id="discountProductsList"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 预约配送区 -->
+            <div class="tab-content" id="delivery-tab">
+                <div class="delivery-section">
+                    <h2 class="section-title">添加预约配送</h2>
+                    <div class="delivery-form">
+                        <input type="date" id="deliveryDate" placeholder="配送日期">
+                        <select id="deliveryTime">
+                            <option value="">选择时段</option>
+                            <option value="上午">上午</option>
+                            <option value="下午">下午</option>
+                            <option value="晚上">晚上</option>
+                        </select>
+                        <input type="text" id="contactName" placeholder="联系人姓名">
+                        <input type="tel" id="contactPhone" placeholder="电话">
+                        <input type="text" id="deliveryAddress" placeholder="地址">
+                        <button type="button" id="selectMemberBtn" style="padding: 8px 12px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">选择会员</button>
+                        <button id="selectProductsBtn">选择商品</button>
+                        <div id="selectedProductsSummary" style="margin: 10px 0; color: #4CAF50;">已选择商品: 0 项，总价:
+                            0.00 元
+                        </div>
+                        <textarea id="deliveryNote" placeholder="备注"></textarea>
+                        <button id="addDeliveryBtn">添加预约</button>
+                    </div>
+
+                    <div class="delivery-list-section">
+                        <div class="search-box" style="margin-bottom: 15px;">
+                            <input type="text" id="deliverySearch" placeholder="搜索客户姓名、电话或地址..." style="width: 300px; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        </div>
+                        <h3 class="section-title">预约记录</h3>
+                        <div class="sort-options">
+                            <select id="sortBy">
+                                <option value="date_time">按日期和时段排序</option>
+                                <option value="address">按地址排序</option>
+                            </select>
+                            <button id="sortBtn">排序</button>
+                            <!-- 新增打印按钮 -->
+                            <button id="printSelectedDeliveriesBtn" class="print-btn" style="background: #2196F3;color: white;border: none;padding: 11px 26px;border-radius: 50px;font-weight: bold;font-size: 15px;box-shadow: 0 4px 15px rgba(33,150,243,0.4);transform: translateX(120%);opacity: 0;transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);white-space: nowrap;display: none;margin-left: 10px;">
+                                <span>🖨️ 打印选中记录 (<span id="selectedPrintCount">0</span>)
+                            </button>
+                            <button id="deleteSelectedDeliveriesBtn" class="delete-btn" style="display: none;">
+                                删除选中记录
+                            </button>
+
+                        </div>
+                        <table id="deliveryTable">
+                            <thead>
+                            <tr>
+                                <th width="30">
+                                    <input type="checkbox" id="selectAllDeliveries" class="select-all-checkbox">
+                                </th>
+                                <th>日期</th>
+                                <th>时段</th>
+                                <th>姓名</th>
+                                <th>电话</th>
+                                <th>地址</th>
+                                <th>商品</th>
+                                <th>总价(元)</th>
+                                <th>备注</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="deliveryList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 会员管理区 -->
+            <div class="tab-content" id="member-tab">
+                <div class="member-section">
+                    <div class="member-tabs">
+                        <div class="member-tab active" data-member-tab="info">
+                            <i>👤</i>
+                            <span>会员信息管理</span>
+                        </div>
+                        <div class="member-tab" data-member-tab="products">
+                            <i>🏷️</i>
+                            <span>会员商品管理</span>
+                        </div>
+                    </div>
+                    <!-- 会员信息管理 -->
+                    <div class="member-content active" id="info-member-content">
+                        <div class="member-management-section">
+                            <h3 class="section-title">会员身份验证</h3>
+                            <div class="member-verify-section">
+                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
+                                    <div style="font-weight: bold; color: #e91e63;">
+                                        👑 当前会员状态
+                                    </div>
+                                    <div id="memberStatus" class="member-status unverified">未验证</div>
+                                </div>
+                                <div class="member-verify-form" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                    <input type="text" id="verifyMemberInput" placeholder="输入姓名或手机号" style="flex: 1; min-width: 200px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px;">
+                                    <button id="verifyMemberBtn" style="white-space: nowrap; padding: 8px 16px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer;">验证身份</button>
+                                    <button id="clearMemberBtn" style="white-space: nowrap; padding: 8px 16px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; display: none;">清除验证</button>
+                                </div>
+                                <div id="memberInfo" style="margin-top: 8px; font-size: 14px; display: none; padding: 8px; background: #f8f9fa; border-radius: 4px;"></div>
+                            </div>
+                            <h3 class="section-title">添加新会员</h3>
+                            <div class="member-form">
+                                <input type="text" id="newMemberName" placeholder="会员姓名">
+                                <input type="tel" id="newMemberPhone" placeholder="手机号">
+                                <button id="addMemberBtn">添加会员</button>
+                            </div>
+                        </div>
+
+                        <div class="member-management-section">
+                            <h3 class="section-title">会员列表</h3>
+                            <div class="search-box" style="margin-bottom: 15px;">
+                                <input type="text" id="memberSearch" placeholder="搜索会员姓名或手机号..." style="width: 300px;">
+                            </div>
+                            <button id="deleteSelectedMembersBtn" style="background: #f44336; color: white; border: none; padding: 11px 26px;border-radius: 50px; font-weight: bold; font-size: 15px;box-shadow: 0 4px 15px rgba(244,67,54,0.4);transform: translateX(120%); opacity: 0;transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);white-space: nowrap; display: none; margin: 15px 0;">
+                                <span>删除选中会员 (<span id="selectedMembersCount">0</span>)
+                            </button>
+                            <table class="member-table">
+                                <thead>
+                                    <tr>
+                                        <th width="40">
+                                            <input type="checkbox" id="selectAllMembersHeader" class="select-all-checkbox">
+                                        </th>
+                                        <th>姓名</th>
+                                        <th>手机号</th>
+                                        <th>地址数量</th>
+                                        <th>默认地址</th>
+                                        <th>注册时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="memberList"></tbody>
+                            </table>
+                        </div>
+
+                            <!-- 地址管理模态框 -->
+                        <div id="addressManagementModal" class="modal" style="display: none;">
+                            <div class="modal-content" style="max-width: 600px;">
+                                <h3>地址管理 - <span id="currentMemberName"></span></h3>
+                                
+                                <!-- 添加新地址 -->
+                                <div class="add-address-form" style="margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
+                                    <h4>添加新地址</h4>
+                                    <div style="display: flex; gap: 10px;">
+                                        <input type="text" id="newAddressInput" placeholder="输入详细地址" style="flex: 1; padding: 8px;">
+                                        <button id="addAddressBtn">添加地址</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- 地址列表 -->
+                                <div class="address-list">
+                                    <h4>地址列表</h4>
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">地址</th>
+                                                <th width="100" style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">默认</th>
+                                                <th width="120" style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="addressList"></tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="modal-buttons" style="margin-top: 20px; text-align: right;">
+                                    <button id="closeAddressModalBtn">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                   
+                    <!-- 会员商品管理 -->
+                    <div class="member-content" id="products-member-content">
+                        <div class="member-products-section">
+                            <h3 class="section-title">设置会员商品折扣率</h3>
+                            <div class="member-product-form">
+                                <select id="memberProductType">
+                                    <option value="">选择品类</option>
+                                    <option value="fruit">水果</option>
+                                    <option value="vegetable">蔬菜</option>
+                                    <option value="snack">零食</option>
+                                    <option value="cigarette">烟</option>
+                                    <option value="liquor">酒</option>
+                                    <option value="beverage">饮料</option>
+                                    <option value="frozen">速冻</option>
+                                    <option value="kitchen">厨房</option>
+                                    <option value="living">生活</option>
+                                </select>
+                                <select id="memberProductSelect">
+                                    <option value="">选择商品</option>
+                                </select>
+                                <input type="number" id="memberProductDiscount" placeholder="折扣率(0.01-1.0)" min="0.01" max="1.0" step="0.01" value="0.9">
+                                <button id="setMemberPriceBtn">设置折扣率</button>
+                            </div>
+                            <div style="margin-top: 8px; font-size: 12px; color: #666;">
+                                <p>提示：折扣率范围 0.01-1.0，例如：0.9 表示 9 折，0.8 表示 8 折</p>
+                            </div>
+                        </div>
+
+                        <div class="member-products-section">
+                            <h3 class="section-title">会员商品列表</h3>
+                            <div class="search-box" style="margin-bottom: 15px;">
+                                <input type="text" id="memberProductSearch" placeholder="搜索会员商品..." style="width: 300px;">
+                            </div>
+
+                            <!-- 批量操作栏 -->
+                            <div class="simple-batch-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; background: white; border-bottom: 2px solid #f0f0f0; margin: 20px 0 0 0;">
+                                <label style="cursor: pointer; user-select: none; display: flex; align-items: center; font-weight: bold; color: #333; font-size: 15px;">
+                                    <input type="checkbox" class="member-product-select-all" style="margin-right: 10px; transform: scale(1.4);">
+                                    全选
+                                </label>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <input type="number" id="bulkDiscountValue" placeholder="折扣率" min="0.01" max="1.0" step="0.01" value="0.9" style="width: 100px; padding: 8px;">
+                                    <button id="bulkDiscountBtn" style="background: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 4px;">批量设置</button>
+                                </div>
+                            </div>
+
+
+                            <button id="deleteSelectedMemberProductsBtn" style="background: #f44336; color: white; border: none; padding: 11px 26px;
+        border-radius: 50px; font-weight: bold; font-size: 15px;
+        box-shadow: 0 4px 15px rgba(244,67,54,0.4);
+        transform: translateX(120%); opacity: 0; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        white-space: nowrap; display: none; margin: 15px 0;">
+                                删除选中会员商品 (<span id="selectedMemberProductsCount">0</span>)
+                            </button>
+
+                            <table class="member-products-table">
+                                <thead>
+                                <tr>
+                                    <th width="40">
+                                        <input type="checkbox" id="selectAllMemberProductsHeader" class="select-all-checkbox">
+                                    </th>
+                                    <th>商品名称</th>
+                                    <th>原价</th>
+                                    <th>会员价</th>
+                                    <th>折扣率</th>
+                                </tr>
+                                </thead>
+                                <tbody id="memberProductsList"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- 销售记录区 -->
+            <div class="tab-content" id="salesRecords-tab">
+                <div class="sales-records-section">
+                    <h2 class="section-title">销售记录</h2>
+                    <!-- 一键删除按钮（默认隐藏，选中后滑出） -->
+                    <button id="deleteSelectedSalesRecordsBtn" style="
+                background: #f44336;
+                color: white;
+                border: none;
+                padding: 11px 26px;
+                border-radius: 50px;
+                font-weight: bold;
+                font-size: 15px;
+                box-shadow: 0 4px 15px rgba(244,67,54,0.4);
+                transform: translateX(120%);
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                white-space: nowrap;
+                display: none;
+            ">
+                        删除选中记录 (<span id="selectedSalesRecordsCount">0</span>)
+                    </button>
+
+                    <!-- 销售记录表格 -->
+                    <table id="salesRecordsTable">
+                        <thead>
+                        <tr>
+                            <th width="30">
+                                <input type="checkbox" id="selectAllSalesRecordsHeader" class="select-all-checkbox">
+                            </th>
+                            <th>销售时间</th>
+                            <th>商品明细</th>
+                            <th>商品数量</th>
+                            <th>总金额(元)</th>
+                        </tr>
+                        </thead>
+                        <tbody id="salesRecordsList"></tbody>
+                    </table>
+
+                    <!-- 统计信息 -->
+                    <div class="sales-stats-section" style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px;">
+                        <h3 class="section-title">销售统计</h3>
+                        <div class="stats-section">
+                            <div class="stat-card">
+                                <div class="stat-label">总交易笔数</div>
+                                <div class="stat-value" id="totalSalesCount">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">总销售金额</div>
+                                <div class="stat-value" id="totalSalesAmount">0.00 元</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">今日交易笔数</div>
+                                <div class="stat-value" id="todaySalesCount">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">今日销售金额</div>
+                                <div class="stat-value" id="todaySalesAmount">0.00 元</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">平均客单价</div>
+                                <div class="stat-value" id="averageOrderValue">0.00 元</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/inventory-manager.js"></script>
+    <script src="js/member-data.js"></script>
+    <script src="js/discount-data.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/member-ui.js"></script>
+    <script src="js/discount-ui.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/unit-manager.js"></script> <!-- 新增这一行 -->
+    <script src="js/ripple.js"></script>
+
+
+</body>
+</html>

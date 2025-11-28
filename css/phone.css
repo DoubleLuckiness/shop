@@ -1,0 +1,538 @@
+/* ===== 基础样式重置 ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+}
+
+/* ===== 全局布局样式 ===== */
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: white;
+    margin: 0;
+    border-radius: 0;
+}
+
+/* ===== 头部区域样式 ===== */
+header {
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+    color: white;
+    padding: 15px 10px;
+    text-align: center;
+    width: 100%;
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.description {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* ===== 标签页导航样式 ===== */
+.tabs {
+    display: flex;
+    background-color: #f1f8e9;
+    position: relative;
+    z-index: 2;
+    flex-wrap: wrap;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tab {
+    flex: 1;
+    min-width: 120px;
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-bottom: 3px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.tab i {
+    font-size: 1rem;
+}
+
+.tab.active {
+    background-color: white;
+    color: #4CAF50;
+    border-bottom: 3px solid #4CAF50;
+}
+
+.content {
+    padding: 10px;
+    position: relative;
+    width: 100%;
+}
+
+.tab-content {
+    display: none;
+    width: 100%;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ===== 通用表单元素样式 ===== */
+select, input, button, textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    padding: 10px;
+}
+
+button:hover {
+    background-color: #388E3C;
+}
+
+/* ===== 表格通用样式 ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 12px;
+    overflow-x: auto;
+    display: block;
+}
+
+th, td {
+    border: 1px solid #e0e0e0;
+    padding: 8px 5px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* ===== 商品网格样式 - 手机端优化 ===== */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.product-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 140px;
+}
+
+.product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.product-card.selected {
+    border-color: #4CAF50;
+    background-color: #f1f8e9;
+}
+
+.product-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+.product-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 12px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    width: 100%;
+}
+
+.product-price {
+    color: #4CAF50;
+    font-size: 14px;
+    margin-bottom: 3px;
+    cursor: pointer;
+    position: relative;
+    font-weight: 700;
+}
+
+/* ===== 销售区域样式 ===== */
+.product-input-section {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.product-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.total {
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: right;
+    padding: 12px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    width: 100%;
+}
+
+/* ===== 库存管理样式 ===== */
+.section-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #333;
+    border-left: 4px solid #4CAF50;
+    padding-left: 10px;
+    width: 100%;
+}
+
+.inventory-tabs {
+    display: flex;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #ddd;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.inventory-tab {
+    padding: 10px 12px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.inventory-tab.active, .category-btn.active {
+    border-bottom: 3px solid #4CAF50;
+    font-weight: bold;
+}
+
+/* ===== 统计卡片样式 ===== */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.stat-card {
+    background-color: #f5f5f5;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    width: 100%;
+}
+
+.stat-value {
+    font-size: 16px;
+    font-weight: bold;
+    color: #4CAF50;
+    margin: 10px 0;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #757575;
+}
+
+/* ===== 商品管理样式 ===== */
+.product-management-section {
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    width: 100%;
+}
+
+.product-management-form, .unit-select-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+/* ===== 分类筛选器样式 ===== */
+.category-filter {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    flex-wrap: wrap;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.category-btn {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ===== 预约配送样式 ===== */
+.delivery-section {
+    background-color: #f9f9f9;
+    padding: 12px;
+    border-radius: 6px;
+    width: 100%;
+}
+
+.delivery-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+/* ===== 搜索框样式 ===== */
+.search-box {
+    position: relative;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 10px 10px 35px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E") no-repeat 10px center;
+    background-size: 16px;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+/* ===== 模态框样式 ===== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.modal-content {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+/* ===== 响应式设计 - 平板设备 ===== */
+@media (min-width: 768px) {
+    .container {
+        max-width: 100%;
+        margin: 0 auto;
+        border-radius: 0;
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+    }
+    
+    .product-management-form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .delivery-form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .tab {
+        min-width: 150px;
+    }
+}
+
+/* ===== 响应式设计 - 桌面设备 ===== */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1400px;
+        margin: 10px auto;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .content {
+        padding: 15px;
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 15px;
+    }
+    
+    .product-management-form {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .delivery-form {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ===== 横屏手机优化 ===== */
+@media (max-height: 500px) and (orientation: landscape) {
+    .container {
+        min-height: 100vh;
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+    
+    .product-card {
+        min-height: 120px;
+        padding: 8px;
+    }
+    
+    header {
+        padding: 10px;
+    }
+}
+
+/* ===== 打印样式 ===== */
+@media print {
+    .container {
+        box-shadow: none;
+        background: white;
+        width: 100%;
+        min-height: auto;
+    }
+    
+    button, .category-filter, .tabs {
+        display: none !important;
+    }
+}
+
+/* ===== 减少动画用户偏好 ===== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== 高对比度模式支持 ===== */
+@media (prefers-contrast: high) {
+    .product-card {
+        border: 2px solid #000;
+    }
+    
+    button {
+        border: 1px solid #000;
+    }
+}
+
+/* ===== 深色模式支持 ===== */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #121212;
+        color: #e0e0e0;
+    }
+    
+    .container {
+        background: #1e1e1e;
+    }
+    
+    .product-card {
+        background: #2d2d2d;
+        border-color: #444;
+    }
+    
+    table {
+        background: #2d2d2d;
+    }
+    
+    th, td {
+        border-color: #444;
+    }
+    
+    th {
+        background: #333;
+    }
+}

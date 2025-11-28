@@ -1,0 +1,229 @@
+/* 打折商品样式 */
+.discount-section {
+    padding: 20px;
+}
+
+.discount-tabs {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--neutral-50);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--neutral-200);
+}
+
+.discount-tab {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--neutral-300);
+    border-radius: var(--border-radius-md);
+    background: white;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--neutral-700);
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.discount-tab.active {
+    color: black;
+    border-color: #ff9800;
+    box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+}
+
+.discount-content {
+    display: none;
+}
+
+.discount-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.discount-management-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--neutral-200);
+}
+
+.discount-product-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    align-items: end;
+}
+
+.discount-products-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    box-shadow: var(--shadow-md);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+}
+
+.discount-products-table th {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    border-bottom: 2px solid #ff9800;
+    font-weight: 600;
+    padding: var(--spacing-lg);
+    color: var(--neutral-800);
+}
+
+.discount-products-table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--neutral-100);
+    transition: var(--transition-fast);
+}
+
+.discount-price {
+    color: #e91e63;
+    font-weight: bold;
+}
+
+/* 销售区打折商品卡片特殊样式 */
+.discount-product-card {
+    border: 2px solid #ff9800 !important;
+    background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%) !important;
+}
+
+.discount-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+}
+
+/* 打折商品卡片样式 */
+.product-card[style*="border: 2px solid #ff9800"] {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-card[style*="border: 2px solid #ff9800"]::before {
+    content: '特价';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #ff5722;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 1;
+}
+
+/* 打折专区分类按钮激活状态 */
+.category-btn[data-category="discount"].active {
+    border-bottom: 3px solid #ff9800;
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+}
+
+.category-btn[data-category="discount"] i {
+    color: #ff9800;
+}
+
+/* 定价方式选择器样式 */
+.pricing-method-group {
+    margin: 15px 0;
+}
+
+
+/* 定价输入组水平布局样式 */
+.pricing-input-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #3498db;
+}
+
+.pricing-input-group label {
+    margin-bottom: 0;
+    white-space: nowrap;
+    min-width: 60px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.pricing-input-group input {
+    width: 120px;
+    flex-shrink: 0;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.pricing-input-group input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.pricing-input-group .hint {
+    margin-top: 0;
+    color: #7f8c8d;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.unit-select-group {
+    margin: 15px 0;
+}
+
+.custom-unit-input {
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* 价格显示样式 */
+.price-display {
+    background-color: #e8f4fc;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 15px;
+    border-left: 4px solid #2980b9;
+}
+
+.price-value {
+    font-weight: bold;
+    color: #2980b9;
+    font-size: 18px;
+}
+
+.hint {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-top: 6px;
+}
+/* 通用批量选择样式 */
+.select-all-checkbox,
+[class*="checkbox"] {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+th:first-child, td:first-child {
+    text-align: center !important;
+}
+
+/* 删除按钮动画（与销售记录一致） */
+#deleteSelectedDiscountBtn,
+#deleteSelectedMembersBtn,
+#deleteSelectedMemberProductsBtn {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
