@@ -1998,16 +1998,17 @@ function generateProductsTable(products) {
     }
 
     let tableHTML = `
-        <table class="products-table">
-            <thead>
-                <tr>
-                    <th width="40%">商品名称</th>
-                    <th width="20%">单价</th>
-                    <th width="15%">数量</th>
-                    <th width="25%">小计</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="table-container">
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th width="40%">商品名称</th>
+                        <th width="20%">单价</th>
+                        <th width="15%">数量</th>
+                        <th width="25%">小计</th>
+                    </tr>
+                </thead>
+                <tbody>
     `;
 
     products.forEach(product => {
@@ -2021,9 +2022,11 @@ function generateProductsTable(products) {
         `;
     });
 
-    tableHTML += `
+
+        tableHTML += `
             </tbody>
         </table>
+    </div>
     `;
 
     return tableHTML;
@@ -2854,19 +2857,22 @@ function createMemberSelectionModal() {
                 
                 <!-- 会员列表 -->
                 <div style="max-height: 400px; overflow-y: auto;">
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background: #f5f5f5;">
-                                <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd; width: 30%;">会员信息</th>
-                                <th style="padding: 10px; text-align: center; border-bottom: 1px solid #ddd; width: 15%;">地址数量</th>
-                                <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd; width: 40%;">默认地址</th>
-                                <th style="padding: 10px; text-align: center; border-bottom: 1px solid #ddd; width: 15%;">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="memberSelectionList">
-                            <!-- 会员列表将通过JavaScript动态填充 -->
-                        </tbody>
-                    </table>
+                    <div class="table-container">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #f5f5f5;">
+                                    <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd; width: 30%;">会员信息</th>
+                                    <th style="padding: 10px; text-align: center; border-bottom: 1px solid #ddd; width: 15%;">地址数量</th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd; width: 40%;">默认地址</th>
+                                    <th style="padding: 10px; text-align: center; border-bottom: 1px solid #ddd; width: 15%;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="memberSelectionList">
+                                <!-- 会员列表将通过JavaScript动态填充 -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
                 </div>
                 
                 <div style="margin-top: 15px; text-align: right;">

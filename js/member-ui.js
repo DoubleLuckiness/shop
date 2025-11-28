@@ -183,16 +183,19 @@
                     <!-- 地址列表 -->
                     <div class="address-list">
                         <h4 style="margin: 0 0 10px 0;">地址列表</h4>
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <thead>
-                                <tr>
-                                    <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">地址</th>
-                                    <th width="80" style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">默认</th>
-                                    <th width="120" style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="addressList"></tbody>
-                        </table>
+                        <div class="table-container">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">地址</th>
+                                        <th width="80" style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">默认</th>
+                                        <th width="120" style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="addressList"></tbody>
+                            </table>
+                        </div>
+                        
                     </div>
                     
                     <div style="margin-top: 20px; text-align: right;">

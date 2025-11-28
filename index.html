@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>水果蔬菜零食烟酒饮料销售与库存管理系统</title>
     
     <link rel="stylesheet" href="css/style.css">
@@ -122,9 +122,9 @@
                             </div>
                         </div>
                     </div>
-                                        
-                    <table id="productTable">
-                        <thead>
+                    <div class="table-container">
+                        <table id="productTable">
+                            <thead>
                             <tr>
                                 <th>商品类型</th>
                                 <th>商品名称</th>
@@ -133,9 +133,13 @@
                                 <th>计价(元)</th>
                                 <th>操作</th>
                             </tr>
-                        </thead>
-                        <tbody id="productList"></tbody>
-                    </table>
+                            </thead>
+                            <tbody id="productList"></tbody>
+                        </table>
+
+                    </div>
+
+
                     
                     <div class="total" id="productTotal">总价: 0.00 元</div>
                     <div style="margin-top:12px; text-align:right;">
@@ -247,24 +251,27 @@
                 </div>
                 <!-- 全部商品库存详情 -->
                 <div class="inventory-detail active" id="all-inventory-detail">
-                    <table class="inventory-table">
-                        <thead>
-                        <tr>
-                            <th>选择</th>
-                            <th>品类</th>
-                            <th>名称</th>
-                            <th>单价(元)</th>
-                            <th>原始库存</th>
-                            <th>已销售</th>
-                            <th>剩余库存</th>
-                            <th>损耗量</th>
-                            <th>净库存</th>
-                            <th>单位</th>
-                            <th>库存状态</th>
-                        </tr>
-                        </thead>
-                        <tbody id="all-inventory-body"></tbody>
-                    </table>
+                    <div class="table-container">
+                        <table class="inventory-table">
+                            <thead>
+                            <tr>
+                                <th>选择</th>
+                                <th>品类</th>
+                                <th>名称</th>
+                                <th>单价(元)</th>
+                                <th>原始库存</th>
+                                <th>已销售</th>
+                                <th>剩余库存</th>
+                                <th>损耗量</th>
+                                <th>净库存</th>
+                                <th>单位</th>
+                                <th>库存状态</th>
+                            </tr>
+                            </thead>
+                            <tbody id="all-inventory-body"></tbody>
+                        </table>
+                    </div>
+
                     <div class="stats-section">
                         <div class="stat-card"><div class="stat-label">总种类</div><div class="stat-value" id="all-types">0</div></div>
                         <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="all-total-initial">0</div></div>
@@ -277,8 +284,9 @@
 
                 <!-- 水果库存详情 -->
                 <div class="inventory-detail" id="fruits-inventory-detail">
-                    <table class="inventory-table">
-                        <thead>
+                    <div class="table-container">
+                        <table class="inventory-table">
+                            <thead>
 
                             <tr>
                                 <th>选择</th>
@@ -292,9 +300,11 @@
                                 <th>单位</th>
                                 <th>库存状态</th>
                             </tr>
-                        </thead>
-                        <tbody id="fruits-inventory-body"></tbody>
-                    </table>
+                            </thead>
+                            <tbody id="fruits-inventory-body"></tbody>
+                        </table>
+                    </div>
+
                     <div class="stats-section">
                         <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="fruit-types">0</div></div>
                         <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="fruit-total-initial">0 </div></div>
@@ -305,8 +315,9 @@
 
                 <!-- 蔬菜库存详情 -->
                 <div class="inventory-detail" id="vegetables-inventory-detail">
-                    <table class="inventory-table">
-                        <thead>
+                    <div class="table-container">
+                        <table class="inventory-table">
+                            <thead>
                             <tr>
                                 <th width="40">选择</th>
                                 <th>名称</th>
@@ -319,9 +330,11 @@
                                 <th>单位</th>
                                 <th>库存状态</th>
                             </tr>
-                        </thead>
-                        <tbody id="vegetables-inventory-body"></tbody>
-                    </table>
+                            </thead>
+                            <tbody id="vegetables-inventory-body"></tbody>
+                        </table>
+                    </div>
+
                     <div class="stats-section">
                         <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="vegetable-types">0</div></div>
                         <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="vegetable-total-initial">0 </div></div>
@@ -332,8 +345,9 @@
 
                 <!-- 零食库存详情 -->
                 <div class="inventory-detail" id="snacks-inventory-detail">
-                    <table class="inventory-table">
-                        <thead>
+                    <div class="table-container">
+                        <table class="inventory-table">
+                            <thead>
                             <tr>
                                 <th width="40">选择</th>
                                 <th>名称</th>
@@ -346,9 +360,11 @@
                                 <th>单位</th>
                                 <th>库存状态</th>
                             </tr>
-                        </thead>
-                        <tbody id="snacks-inventory-body"></tbody>
-                    </table>
+                            </thead>
+                            <tbody id="snacks-inventory-body"></tbody>
+                        </table>
+                    </div>
+
                     <div class="stats-section">
                         <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="snack-types">0</div></div>
                         <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="snack-total-initial">0 个</div></div>
@@ -359,8 +375,9 @@
 
                 <!-- 烟库存详情 -->
                 <div class="inventory-detail" id="cigarettes-inventory-detail">
-                    <table class="inventory-table">
-                        <thead>
+                    <div class="table-container">
+                        <table class="inventory-table">
+                            <thead>
                             <tr>
                                 <th width="40">选择</th>
                                 <th>名称</th>
@@ -373,9 +390,11 @@
                                 <th>单位</th>
                                 <th>库存状态</th>
                             </tr>
-                        </thead>
-                        <tbody id="cigarettes-inventory-body"></tbody>
-                    </table>
+                            </thead>
+                            <tbody id="cigarettes-inventory-body"></tbody>
+                        </table>
+                    </div>
+
                     <div class="stats-section">
                         <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="cigarette-types">0</div></div>
                         <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="cigarette-total-initial">0 包</div></div>
@@ -386,8 +405,9 @@
 
                 <!-- 酒库存详情 -->
                 <div class="inventory-detail" id="liquor-inventory-detail">
-                    <table class="inventory-table">
-                        <thead>
+                    <div class="table-container">
+                        <table class="inventory-table">
+                            <thead>
                             <tr>
                                 <th width="40">选择</th>
                                 <th>名称</th>
@@ -400,21 +420,24 @@
                                 <th>单位</th>
                                 <th>库存状态</th>
                             </tr>
-                        </thead>
-                        <tbody id="liquor-inventory-body"></tbody>
-                    </table>
-                    <div class="stats-section">
-                        <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="liquor-types">0</div></div>
-                        <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="liquor-total-initial">0 瓶</div></div>
-                        <div class="stat-card"><div class="stat-label">总销售量</div><div class="stat-value" id="liquor-total-sold">0 瓶</div></div>
-                        <div class="stat-card"><div class="stat-label">总剩余库存</div><div class="stat-value" id="liquor-total-remaining">0 瓶</div></div>
+                            </thead>
+                            <tbody id="liquor-inventory-body"></tbody>
+                        </table>
+                        <div class="stats-section">
+                            <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="liquor-types">0</div></div>
+                            <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="liquor-total-initial">0 瓶</div></div>
+                            <div class="stat-card"><div class="stat-label">总销售量</div><div class="stat-value" id="liquor-total-sold">0 瓶</div></div>
+                            <div class="stat-card"><div class="stat-label">总剩余库存</div><div class="stat-value" id="liquor-total-remaining">0 瓶</div></div>
+                        </div>
                     </div>
+
                 </div>
 
                 <!-- 饮料库存详情 -->
                 <div class="inventory-detail" id="beverages-inventory-detail">
-                    <table class="inventory-table">
-                        <thead>
+                    <div class="table-container">
+                        <table class="inventory-table">
+                            <thead>
                             <tr>
                                 <th width="40">选择</th>
                                 <th>名称</th>
@@ -427,9 +450,12 @@
                                 <th>单位</th>
                                 <th>库存状态</th>
                             </tr>
-                        </thead>
-                        <tbody id="beverages-inventory-body"></tbody>
-                    </table>
+                            </thead>
+                            <tbody id="beverages-inventory-body"></tbody>
+                        </table>
+                    </div>
+
+
                     <div class="stats-section">
                         <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="beverage-types">0</div></div>
                         <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="beverage-total-initial">0 瓶</div></div>
@@ -440,8 +466,9 @@
 
                 <!-- 速冻库存详情 -->
                 <div class="inventory-detail" id="frozens-inventory-detail">
-                    <table class="inventory-table">
-                        <thead>
+                    <div class="table-container">
+                        <table class="inventory-table">
+                            <thead>
                             <tr>
                                 <th width="40">选择</th>
                                 <th>名称</th>
@@ -454,9 +481,11 @@
                                 <th>单位</th>
                                 <th>库存状态</th>
                             </tr>
-                        </thead>
-                        <tbody id="frozens-inventory-body"></tbody>
-                    </table>
+                            </thead>
+                            <tbody id="frozens-inventory-body"></tbody>
+                        </table>
+                    </div>
+
                     <div class="stats-section">
                         <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="frozen-types">0</div></div>
                         <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="frozen-total-initial">0 </div></div>
@@ -467,8 +496,9 @@
 
                 <!-- 厨房库存详情 -->
                 <div class="inventory-detail" id="kitchens-inventory-detail">
-                    <table class="inventory-table">
-                        <thead>
+                    <div class="table-container">
+                        <table class="inventory-table">
+                            <thead>
                             <tr>
                                 <th width="40">选择</th>
                                 <th>名称</th>
@@ -481,9 +511,12 @@
                                 <th>单位</th>
                                 <th>库存状态</th>
                             </tr>
-                        </thead>
-                        <tbody id="kitchens-inventory-body"></tbody>
-                    </table>
+                            </thead>
+                            <tbody id="kitchens-inventory-body"></tbody>
+                        </table>
+                    </div>
+
+
                     <div class="stats-section">
                         <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="kitchen-types">0</div></div>
                         <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="kitchen-total-initial">0 </div></div>
@@ -494,8 +527,9 @@
 
                 <!-- 生活库存详情 -->
                 <div class="inventory-detail" id="livings-inventory-detail">
-                    <table class="inventory-table">
-                        <thead>
+                    <div class="table-container">
+                        <table class="inventory-table">
+                            <thead>
                             <tr>
                                 <th width="40">选择</th>
                                 <th>名称</th>
@@ -508,9 +542,11 @@
                                 <th>单位</th>
                                 <th>库存状态</th>
                             </tr>
-                        </thead>
-                        <tbody id="livings-inventory-body"></tbody>
-                    </table>
+                            </thead>
+                            <tbody id="livings-inventory-body"></tbody>
+                        </table>
+                    </div>
+
                     <div class="stats-section">
                         <div class="stat-card"><div class="stat-label">种类</div><div class="stat-value" id="living-types">0</div></div>
                         <div class="stat-card"><div class="stat-label">总原始库存</div><div class="stat-value" id="living-total-initial">0 </div></div>
@@ -1286,26 +1322,29 @@
                                 <input type="text" id="discountProductSearch" placeholder="搜索打折商品..." style="width: 300px;">
                             </div>
                             <button id="deleteSelectedDiscountBtn" style="background: #f44336; color: white; border: none; padding: 11px 26px;border-radius: 50px; font-weight: bold; font-size: 15px; box-shadow: 0 4px 15px rgba(244,67,54,0.4);transform: translateX(120%); opacity: 0; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);white-space: nowrap; display: none; margin: 15px 0;">
-                               <span> 删除选中打折商品 (<span id="selectedDiscountCount">0</span>)
+                                <span> 删除选中打折商品 (<span id="selectedDiscountCount">0</span>)</span>
                             </button>
-                            <table class="discount-products-table">
-                                <thead>
-                                <tr>
-                                    <th width="40">
-                                        <input type="checkbox" id="selectAllDiscountHeader" class="select-all-checkbox">
-                                    </th>
-                                    <th>商品名称</th>
-                                    <th>原价</th>
-                                    <th>打折价</th>
-                                    <th>折扣率</th>
-                                    <th>库存</th>
-                                    <th>单位</th>
-                                    <th>原因</th>
-                                    <th>创建时间</th>
-                                </tr>
-                                </thead>
-                                <tbody id="discountProductsList"></tbody>
-                            </table>
+                            <div class="table-container">
+                                <table class="discount-products-table">
+                                    <thead>
+                                    <tr>
+                                        <th width="40">
+                                            <input type="checkbox" id="selectAllDiscountHeader" class="select-all-checkbox">
+                                        </th>
+                                        <th>商品名称</th>
+                                        <th>原价</th>
+                                        <th>打折价</th>
+                                        <th>折扣率</th>
+                                        <th>库存</th>
+                                        <th>单位</th>
+                                        <th>原因</th>
+                                        <th>创建时间</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="discountProductsList"></tbody>
+                                </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -1348,33 +1387,36 @@
                             <button id="sortBtn">排序</button>
                             <!-- 新增打印按钮 -->
                             <button id="printSelectedDeliveriesBtn" class="print-btn" style="background: #2196F3;color: white;border: none;padding: 11px 26px;border-radius: 50px;font-weight: bold;font-size: 15px;box-shadow: 0 4px 15px rgba(33,150,243,0.4);transform: translateX(120%);opacity: 0;transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);white-space: nowrap;display: none;margin-left: 10px;">
-                                <span>🖨️ 打印选中记录 (<span id="selectedPrintCount">0</span>)
+                                <span>🖨️ 打印选中记录 (<span id="selectedPrintCount">0</span>)</span>
                             </button>
                             <button id="deleteSelectedDeliveriesBtn" class="delete-btn" style="display: none;">
                                 删除选中记录
                             </button>
 
                         </div>
-                        <table id="deliveryTable">
-                            <thead>
-                            <tr>
-                                <th width="30">
-                                    <input type="checkbox" id="selectAllDeliveries" class="select-all-checkbox">
-                                </th>
-                                <th>日期</th>
-                                <th>时段</th>
-                                <th>姓名</th>
-                                <th>电话</th>
-                                <th>地址</th>
-                                <th>商品</th>
-                                <th>总价(元)</th>
-                                <th>备注</th>
-                                <th>状态</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody id="deliveryList"></tbody>
-                        </table>
+                        <div class="table-container">
+                            <table id="deliveryTable">
+                                <thead>
+                                <tr>
+                                    <th width="30">
+                                        <input type="checkbox" id="selectAllDeliveries" class="select-all-checkbox">
+                                    </th>
+                                    <th>日期</th>
+                                    <th>时段</th>
+                                    <th>姓名</th>
+                                    <th>电话</th>
+                                    <th>地址</th>
+                                    <th>商品</th>
+                                    <th>总价(元)</th>
+                                    <th>备注</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="deliveryList"></tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -1424,10 +1466,11 @@
                                 <input type="text" id="memberSearch" placeholder="搜索会员姓名或手机号..." style="width: 300px;">
                             </div>
                             <button id="deleteSelectedMembersBtn" style="background: #f44336; color: white; border: none; padding: 11px 26px;border-radius: 50px; font-weight: bold; font-size: 15px;box-shadow: 0 4px 15px rgba(244,67,54,0.4);transform: translateX(120%); opacity: 0;transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);white-space: nowrap; display: none; margin: 15px 0;">
-                                <span>删除选中会员 (<span id="selectedMembersCount">0</span>)
+                                <span>删除选中会员 (<span id="selectedMembersCount">0</span>)</span>
                             </button>
-                            <table class="member-table">
-                                <thead>
+                            <div class="table-container">
+                                <table class="member-table">
+                                    <thead>
                                     <tr>
                                         <th width="40">
                                             <input type="checkbox" id="selectAllMembersHeader" class="select-all-checkbox">
@@ -1438,9 +1481,12 @@
                                         <th>默认地址</th>
                                         <th>注册时间</th>
                                     </tr>
-                                </thead>
-                                <tbody id="memberList"></tbody>
-                            </table>
+                                    </thead>
+                                    <tbody id="memberList"></tbody>
+                                </table>
+                            </div>
+
+
                         </div>
 
                             <!-- 地址管理模态框 -->
@@ -1460,16 +1506,19 @@
                                 <!-- 地址列表 -->
                                 <div class="address-list">
                                     <h4>地址列表</h4>
-                                    <table style="width: 100%; border-collapse: collapse;">
-                                        <thead>
+                                    <div class="table-container">
+                                        <table style="width: 100%; border-collapse: collapse;">
+                                            <thead>
                                             <tr>
                                                 <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">地址</th>
                                                 <th width="100" style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">默认</th>
                                                 <th width="120" style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">操作</th>
                                             </tr>
-                                        </thead>
-                                        <tbody id="addressList"></tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody id="addressList"></tbody>
+                                        </table>
+                                    </div>
+
                                 </div>
                                 
                                 <div class="modal-buttons" style="margin-top: 20px; text-align: right;">
@@ -1535,20 +1584,22 @@
                                 删除选中会员商品 (<span id="selectedMemberProductsCount">0</span>)
                             </button>
 
-                            <table class="member-products-table">
-                                <thead>
-                                <tr>
-                                    <th width="40">
-                                        <input type="checkbox" id="selectAllMemberProductsHeader" class="select-all-checkbox">
-                                    </th>
-                                    <th>商品名称</th>
-                                    <th>原价</th>
-                                    <th>会员价</th>
-                                    <th>折扣率</th>
-                                </tr>
-                                </thead>
-                                <tbody id="memberProductsList"></tbody>
-                            </table>
+                            <div class="table-container">
+                                <table class="member-products-table">
+                                    <thead>
+                                    <tr>
+                                        <th width="40">
+                                            <input type="checkbox" id="selectAllMemberProductsHeader" class="select-all-checkbox">
+                                        </th>
+                                        <th>商品名称</th>
+                                        <th>原价</th>
+                                        <th>会员价</th>
+                                        <th>折扣率</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="memberProductsList"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
@@ -1580,20 +1631,23 @@
                     </button>
 
                     <!-- 销售记录表格 -->
-                    <table id="salesRecordsTable">
-                        <thead>
-                        <tr>
-                            <th width="30">
-                                <input type="checkbox" id="selectAllSalesRecordsHeader" class="select-all-checkbox">
-                            </th>
-                            <th>销售时间</th>
-                            <th>商品明细</th>
-                            <th>商品数量</th>
-                            <th>总金额(元)</th>
-                        </tr>
-                        </thead>
-                        <tbody id="salesRecordsList"></tbody>
-                    </table>
+                    <div class="table-container">
+                        <table id="salesRecordsTable">
+                            <thead>
+                            <tr>
+                                <th width="30">
+                                    <input type="checkbox" id="selectAllSalesRecordsHeader" class="select-all-checkbox">
+                                </th>
+                                <th>销售时间</th>
+                                <th>商品明细</th>
+                                <th>商品数量</th>
+                                <th>总金额(元)</th>
+                            </tr>
+                            </thead>
+                            <tbody id="salesRecordsList"></tbody>
+                        </table>
+                    </div>
+
 
                     <!-- 统计信息 -->
                     <div class="sales-stats-section" style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px;">

@@ -1510,12 +1510,224 @@ tr:hover td {
 #memberProductSearch {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cpath d='m21 21-4.3-4.3'%3E%3C/path%3E%3C/svg%3E");
 }
+
+/* 在 modern-ui-enhancement.css 中添加 */
+.container {
+    overflow-x: auto; /* 允许水平滚动 */
+    min-width: 320px; /* 设置最小宽度 */
+}
+
+/* 确保表格可以水平滚动 */
+table {
+    min-width: 600px; /* 确保表格有最小宽度 */
+}
+
+/* 为所有表格容器添加滚动 */
+.table-container {
+    overflow-x: auto;
+    width: 100%;
+}
+
+/* 在 modern-ui-enhancement.css 中修改响应式部分 */
 @media (max-width: 768px) {
-    :root {
-        --spacing-md: 12px; /* 小屏减小间距 */
-    }
     .container {
-        margin: 10px;
-        border-radius: 10px;
+        margin: 8px;
+        border-radius: 12px;
+        padding: 8px;
+    }
+
+    /* 商品网格调整为2列 */
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin: 10px 0;
+    }
+
+    .product-card {
+        padding: 12px 8px;
+        min-height: 120px;
+    }
+
+    .product-icon {
+        font-size: 32px;
+        margin-bottom: 8px;
+    }
+
+    .product-name {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    .product-price {
+        font-size: 16px;
+    }
+
+    /* 选项卡垂直布局 */
+    .tabs {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .tab {
+        flex: none;
+        padding: 12px 8px;
+        margin-bottom: 4px;
+        border-radius: 8px;
+    }
+
+    /* 统计卡片单列布局 */
+    .stats-section {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* 分类筛选器优化 */
+    .category-filter,
+    .inventory-tabs,
+    .member-tabs,
+    .discount-tabs {
+        gap: 8px;
+        padding: 12px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+
+    .category-btn,
+    .inventory-tab,
+    .member-tab,
+    .discount-tab {
+        flex-shrink: 0;
+        padding: 8px 12px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    /* 表单布局优化 */
+    .product-management-form {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .member-form,
+    .discount-product-form {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* 搜索框全宽 */
+    .search-box input {
+        width: 100% !important;
+    }
+
+    .inventory-tabs .search-box {
+        margin-right: 0;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    /* 表格相关优化 */
+    .table-container {
+        margin: 0 -8px;
+        padding: 0 8px;
+    }
+
+    table {
+        font-size: 12px;
+        min-width: 600px;
+    }
+
+    th, td {
+        padding: 8px 6px;
+        white-space: nowrap;
+    }
+
+    /* 按钮组优化 */
+    button:not(.delete-btn):not(.edit-btn) {
+        padding: 12px 16px;
+        font-size: 14px;
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    /* 头部优化 */
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .description {
+        font-size: 0.9rem;
+    }
+
+    /* 内容区域内边距优化 */
+    .content {
+        padding: 8px;
+    }
+
+    /* 模态框优化 */
+    #lossManagementModal {
+        padding: 20px 10px;
+        align-items: flex-start;
+    }
+
+    #lossManagementModal > div {
+        width: 95%;
+        padding: 20px 15px;
+        margin-top: 20px;
+    }
+
+    /* 商品管理表单5列改为2列 */
+    .product-management-form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .product-management-form > div:nth-child(5) {
+        grid-column: 1 / -1;
+    }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .product-card {
+        padding: 10px;
+        min-height: 110px;
+    }
+
+    .product-icon {
+        font-size: 28px;
+    }
+
+    .tabs {
+        gap: 2px;
+    }
+
+    .tab {
+        padding: 10px 6px;
+        font-size: 14px;
+    }
+
+    .category-filter,
+    .inventory-tabs {
+        padding: 8px;
+    }
+
+    .category-btn,
+    .inventory-tab {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    table {
+        font-size: 11px;
+        min-width: 500px;
+    }
+
+    th, td {
+        padding: 6px 4px;
     }
 }
