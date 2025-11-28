@@ -26,6 +26,12 @@
         button[data-type="delete"] .ripple {
             background: rgba(0, 0, 0, 0.3);
         }
+        
+        @media (max-width: 768px) { /* 小屏减小涟漪大小 */
+            .ripple {
+                animation-duration: 0.4s;
+            }
+        }
     `;
 
     // 注入样式（只注入一次）

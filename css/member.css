@@ -5,12 +5,9 @@
 
 .member-tabs {
     display: flex;
+    flex-wrap: wrap;
     gap: 16px;
-    margin-bottom: 24px;
-    padding: 16px;
-    background: var(--neutral-50);
-    border-radius: var(--border-radius-lg);
-    border: 1px solid var(--neutral-200);
+
 }
 
 .member-tab {
@@ -94,7 +91,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
-    align-items: end;
+
 }
 
 .member-product-form {
@@ -201,22 +198,10 @@
 /* 响应式设计 */
 @media (max-width: 768px) {
     .member-tabs {
-        flex-wrap: wrap;
-    }
-    
-    .member-tab {
-        flex: 1 0 45%;
-        text-align: center;
-    }
-    
-    .member-form,
-    .member-product-form {
-        grid-template-columns: 1fr;
-    }
-    
-    .member-verify-form {
         flex-direction: column;
-        align-items: stretch;
+    }
+    .member-form {
+        grid-template-columns: 1fr;
     }
 }
 

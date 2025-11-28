@@ -13,11 +13,26 @@
     let currentMember = null;
 
     // 初始化会员数据
+    // function initMemberData() {
+    //     loadMemberData();
+    //     loadMemberProductsData();
+    //     loadCurrentMember();
+    //     migrateMemberData();
+    // }
     function initMemberData() {
-        loadMemberData();
-        loadMemberProductsData();
-        loadCurrentMember();
-        migrateMemberData();
+        try {
+            loadAllData();
+            migrateMemberData();
+        } catch (e) {
+            console.error('初始化失败:', e);
+        }
+    }
+
+    function loadAllData() {
+        if (!isLocalStorageAvailable()) return;
+        members = JSON.parse(localStorage.getItem(MEMBER_STORAGE_KEY)) || [];
+        memberProducts = JSON.parse(localStorage.getItem(MEMBER_PRODUCTS_STORAGE_KEY)) || {};
+        currentMember = JSON.parse(localStorage.getItem(CURRENT_MEMBER_STORAGE_KEY)) || null;
     }
 
     // 数据迁移：将单地址转换为多地址

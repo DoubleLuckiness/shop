@@ -1510,3 +1510,12 @@ tr:hover td {
 #memberProductSearch {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cpath d='m21 21-4.3-4.3'%3E%3C/path%3E%3C/svg%3E");
 }
+@media (max-width: 768px) {
+    :root {
+        --spacing-md: 12px; /* 小屏减小间距 */
+    }
+    .container {
+        margin: 10px;
+        border-radius: 10px;
+    }
+}

@@ -6,7 +6,12 @@
     let discountProducts = [];
 
     function initDiscountData() {
-        loadDiscountProductsData();
+        try {
+            loadDiscountProductsData();
+        } catch (e) {
+            console.error('初始化失败:', e);
+        }
+        
     }
 
     function loadDiscountProductsData() {
@@ -14,14 +19,9 @@
 
         const saved = localStorage.getItem(DISCOUNT_PRODUCTS_STORAGE_KEY);
         if (saved) {
-            try {
-                discountProducts = JSON.parse(saved);
-                console.log('加载打折商品数据:', discountProducts);
-            } catch (e) {
-                console.warn('打折商品数据解析失败，使用默认空数组:', e);
-                discountProducts = [];
-            }
+            discountProducts = JSON.parse(saved) || [];
         }
+       
     }
 
     function saveDiscountProductsData() {
@@ -42,14 +42,18 @@
 
     // 辅助函数：获取商品单位
     function getUnit(type) {
-        if (type === 'cigarette') return '包';
-        if (type === 'beverage' || type === 'liquor') return '瓶';
-        if (type === 'snack') return '个';
-        if (type === 'frozen') return '袋';
-        if (type === 'kitchen' || type === 'living') return '件';
-        return '公斤';
+        const units = {
+            cigarette: '包',
+            beverage: '瓶',
+            liquor: '瓶',
+            snack: '个',
+            frozen: '袋',
+            kitchen: '件',
+            living: '件'
+        };
+        return units[type] || '公斤';
     }
-
+    
     const DiscountProductManager = {
         // 创建独立的打折商品
 

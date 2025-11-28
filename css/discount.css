@@ -5,6 +5,7 @@
 
 .discount-tabs {
     display: flex;
+    flex-wrap: wrap; /* 响应式换行 */
     gap: 16px;
     margin-bottom: 24px;
     padding: 16px;
@@ -104,7 +105,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 12px;
-    align-items: end;
+
 }
 
 .discount-products-table {
@@ -431,4 +432,13 @@ th:first-child, td:first-child {
     font-size: 0.7rem;
     font-weight: 600;
     z-index: 2;
+}
+@media (max-width: 768px) {
+    .discount-product-form {
+        grid-template-columns: 1fr;
+    }
+    .discount-tabs {
+        flex-direction: column;
+    }
+    /* 其他小屏调整 */
 }

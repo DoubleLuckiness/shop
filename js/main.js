@@ -34,39 +34,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 新增搜索功能初始化
     initSearch();
-
-    // 新增：初始化库存管理器
-    if (typeof InventoryManager !== 'undefined') {
-        window.inventoryManager = new InventoryManager();
-    }
-
-
+    window.inventoryManager = new InventoryManager();
     refreshAll();
     console.log('页面初始化完成');
-    // 事件委托：不管按钮被重绘多少次，这个监听永远有效
-    document.addEventListener('click', e => {
-        if (e.target && e.target.id === 'clearAllDeliveriesBtn') {
-            clearAllDeliveries();
-        }
-        if (e.target && e.target.id === 'sortBtn') {
-            sortDeliveries();
-        }
-    });
+    // 响应式监听
+    window.addEventListener('resize', refreshAll);
+
 });
 
 function initEventListeners() {
     // 监听商品编辑请求
     document.addEventListener('productEditRequest', function(e) {
         const { type, name } = e.detail;
-        console.log('收到商品编辑请求:', type, name);
+
         startEditProduct(type, name);
     });
 
-
-    // 监听配送相关事件
-    document.addEventListener('productEditRequest', function(e) {
-        const { type, name } = e.detail;
-        startEditProduct(type, name);
+    document.addEventListener('click', (e) => {
+        if (e.target.id === 'clearAllDeliveriesBtn') clearAllDeliveries();
+        if (e.target.id === 'sortBtn') sortDeliveries();
     });
 }
 // ==================== localStorage 检测 ====================

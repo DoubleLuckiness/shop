@@ -45,6 +45,9 @@
         const types = ['fruit', 'vegetable', 'snack', 'cigarette', 'liquor', 'beverage', 'frozen', 'kitchen', 'living'];
         
         types.forEach(type => {
+            // 原逻辑 + 响应式：小屏调整select宽度
+            const selects = document.querySelectorAll('.unit-select');
+            selects.forEach(select => select.style.width = '100%');
             const cap = type.charAt(0).toUpperCase() + type.slice(1);
             const form = document.querySelector(`#${type}-management-content .product-management-form`);
             if (form) {
@@ -153,22 +156,15 @@
                     }, 100);
                 }
             });
-            
-            console.log('单位管理器初始化完成');
+
+            window.addEventListener('resize', addUnitSelectors); // 响应式重置
         }, 500);
     }
     
     // 导出函数供外部调用
     window.UnitManager = {
-        init: initUnitManager,
-        getFinalUnit: getFinalUnit,
-        getProductUnit: getProductUnit
+        init: initUnitManager, getFinalUnit, getProductUnit
     };
-    
-    // 页面加载完成后初始化
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initUnitManager);
-    } else {
-        initUnitManager();
-    }
+    document.addEventListener('DOMContentLoaded', initUnitManager);
+
 })();

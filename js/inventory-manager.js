@@ -34,59 +34,50 @@ class InventoryManager {
     }
 
     bindEvents() {
-        // 损耗量管理
-        const manageLossBtn = document.getElementById('manageLossBtn');
-        const cancelLossBtn = document.getElementById('cancelLossBtn');
-        const saveLossBtn = document.getElementById('saveLossBtn');
-        const lossProductType = document.getElementById('lossProductType');
-
-        if (manageLossBtn) manageLossBtn.addEventListener('click', () => this.showLossModal());
-        if (cancelLossBtn) cancelLossBtn.addEventListener('click', () => this.hideLossModal());
-        if (saveLossBtn) saveLossBtn.addEventListener('click', () => this.saveLoss());
-        if (lossProductType) lossProductType.addEventListener('change', (e) => this.updateLossProductOptions(e.target.value));
-
-        // 批量操作
-        const selectAllInventory = document.getElementById('selectAllInventory');
-        const applySortBtn = document.getElementById('applySortBtn');
-        const clearSalesBtn = document.getElementById('clearSalesBtn');
-
-        if (selectAllInventory) selectAllInventory.addEventListener('change', (e) => this.toggleSelectAllInventory(e.target.checked));
-        if (applySortBtn) applySortBtn.addEventListener('click', () => this.applySort());
-        if (clearSalesBtn) clearSalesBtn.addEventListener('click', () => this.clearSelectedSales());
-
-
-
-        // 使用事件委托处理动态生成的复选框
-        document.addEventListener('change', (e) => {
-            if (e.target.classList.contains('inventory-checkbox')) {
-                this.handleInventoryCheckboxChange(e.target);
-            }
-        });
-
-        // 库存选项卡切换时更新UI
+        // 合并事件委托
         document.addEventListener('click', (e) => {
             if (e.target.closest('.inventory-tab')) {
-                setTimeout(() => {
-                    this.updateInventoryBatchUI();
-                }, 100);
+                setTimeout(() => this.updateInventoryBatchUI(), 100);
+            } else if (e.target.id === 'sortOrderIndicator') {
+                this.toggleSortOrder();
+            } else if (e.target.id === 'applySortBtn') {
+                this.applySort();
+            } else if (e.target.id === 'clearSalesBtn') {
+                this.clearSelectedSales();
+            } else if (e.target.id === 'manageLossBtn') {
+                this.showLossModal();
+            } else if (e.target.id === 'cancelLossBtn') {
+                this.hideLossModal();
+            } else if (e.target.id === 'saveLossBtn') {
+                this.saveLoss();
             }
         });
 
-        // 新增：排序顺序切换
-        const sortOrderIndicator = document.getElementById('sortOrderIndicator');
-        if (sortOrderIndicator) {
-            sortOrderIndicator.addEventListener('click', () => this.toggleSortOrder());
-        }
+        document.addEventListener('change', (e) => {
+            if (e.target.id === 'selectAllInventory') {
+                this.toggleSelectAllInventory(e.target.checked);
+            } else if (e.target.classList.contains('inventory-checkbox')) {
+                this.handleInventoryCheckboxChange(e.target);
+            } else if (e.target.id === 'lossProductType') {
+                this.updateLossProductOptions(e.target.value);
+            } else if (e.target.id === 'inventorySort') {
+                this.updateSortUI();
+            }
+        });
 
-        // 新增：排序字段变化时自动更新UI
-        const inventorySort = document.getElementById('inventorySort');
-        if (inventorySort) {
-            inventorySort.addEventListener('change', () => this.updateSortUI());
-        }
+        // 响应式调整：监听窗口大小变化
+        window.addEventListener('resize', () => this.adjustForScreenSize());
 
-        // 新增：监听库存选项卡切换
         this.bindInventoryTabEvents();
-        console.log('库存管理器事件绑定完成');
+    }
+
+    adjustForScreenSize() {
+        // 示例：小屏隐藏某些列
+        if (window.innerWidth < 768) {
+            document.querySelectorAll('.inventory-table th:nth-child(n+8), td:nth-child(n+8)').forEach(el => el.style.display = 'none');
+        } else {
+            document.querySelectorAll('.inventory-table th:nth-child(n+8), td:nth-child(n+8)').forEach(el => el.style.display = '');
+        }
     }
 
     // 新增：绑定库存选项卡事件

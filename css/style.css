@@ -9,7 +9,6 @@
 /* ===== 全局布局样式 ===== */
 body {
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    min-height: 100vh;
     padding: 20px;
 }
 
@@ -17,10 +16,7 @@ body {
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+
 }
 
 /* ===== 头部区域样式 ===== */
@@ -44,9 +40,8 @@ h1 {
 /* ===== 标签页导航样式 ===== */
 .tabs {
     display: flex;
-    background-color: #f1f8e9;
-    position: relative;
-    z-index: 2; /* 确保选项卡在分类筛选上方 */
+    flex-wrap: wrap;
+
 }
 
 .tab {
@@ -1253,5 +1248,15 @@ select option[style*="color: #e91e63"] {
     border: 2px solid #ff9800 !important;
     background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%) !important;
 }
-
+@media (max-width: 768px) {
+    .tabs {
+        flex-direction: column;
+    }
+    table {
+        font-size: 14px; /* 小屏字体调整 */
+    }
+    .product-card {
+        width: 100%; /* 全宽 */
+    }
+}
 
